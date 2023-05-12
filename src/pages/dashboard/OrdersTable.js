@@ -4,28 +4,26 @@ import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
 import { Box, Link, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Tag } from 'antd';
 
 // third-party
 import NumberFormat from 'react-number-format';
 
-// project import
-import Dot from 'components/@extended/Dot';
-
-function createData(trackingNo, name, fat, carbs, protein) {
-    return { trackingNo, name, fat, carbs, protein };
+function createData(NIM, name, numCourses, level, emission) {
+    return { NIM, name, numCourses, level, emission };
 }
 
 const rows = [
-    createData(84564564, 'Camera Lens', 40, 2, 40570),
-    createData(98764564, 'Laptop', 300, 0, 180139),
-    createData(98756325, 'Mobile', 355, 1, 90989),
-    createData(98652366, 'Handset', 50, 1, 10239),
-    createData(13286564, 'Computer Accessories', 100, 1, 83348),
-    createData(86739658, 'TV', 99, 0, 410780),
-    createData(13256498, 'Keyboard', 125, 2, 70999),
-    createData(98753263, 'Mouse', 89, 2, 10570),
-    createData(98753275, 'Desktop', 185, 1, 98063),
-    createData(98753291, 'Chair', 100, 0, 14001)
+    createData(13518001, 'Chandrika Azharyanti', 22, 2, 40570),
+    createData(13518002, 'Aqil Abdul Aziz Syafiq', 24, 0, 180139),
+    createData(13518003, 'Dimas Lucky Mahendra', 15, 1, 90989),
+    createData(13518004, `Qurrata A'Yuni`, 18, 1, 10239),
+    createData(13518005, 'Arung Agamani Budi Putera', 16, 1, 83348),
+    createData(13518006, 'Ahadi Ihsan Rasyidin', 19, 0, 410780),
+    createData(13518007, 'Ade Surya Handika', 20, 2, 70999),
+    createData(13518008, 'Hasna Roihan Nafiisah', 21, 2, 10570),
+    createData(13518009, 'Aufa Fadhlurohman', 23, 1, 98063),
+    createData(13518010, 'Moh. Mirza Maulana Ikhsan', 20, 0, 14001)
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -58,35 +56,34 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'trackingNo',
+        id: 'NIM',
         align: 'left',
         disablePadding: false,
-        label: 'Tracking No.'
+        label: 'NIM'
     },
     {
         id: 'name',
         align: 'left',
         disablePadding: true,
-        label: 'Product Name'
+        label: 'Student Name'
     },
     {
-        id: 'fat',
-        align: 'right',
-        disablePadding: false,
-        label: 'Total Order'
-    },
-    {
-        id: 'carbs',
+        id: 'numCourses',
         align: 'left',
         disablePadding: false,
-
-        label: 'Status'
+        label: 'Courses taken'
     },
     {
-        id: 'protein',
-        align: 'right',
+        id: 'level',
+        align: 'left',
         disablePadding: false,
-        label: 'Total Amount'
+        label: 'Emission Level'
+    },
+    {
+        id: 'emission',
+        align: 'left',
+        disablePadding: false,
+        label: 'Total Emission'
     }
 ];
 
@@ -125,15 +122,15 @@ const OrderStatus = ({ status }) => {
     switch (status) {
         case 0:
             color = 'warning';
-            title = 'Pending';
+            title = 'Medium';
             break;
         case 1:
             color = 'success';
-            title = 'Approved';
+            title = 'Low';
             break;
         case 2:
             color = 'error';
-            title = 'Rejected';
+            title = 'High';
             break;
         default:
             color = 'primary';
@@ -142,8 +139,7 @@ const OrderStatus = ({ status }) => {
 
     return (
         <Stack direction="row" spacing={1} alignItems="center">
-            <Dot color={color} />
-            <Typography>{title}</Typography>
+            <Tag color={color}>{title}</Tag>
         </Stack>
     );
 };
@@ -156,10 +152,10 @@ OrderStatus.propTypes = {
 
 export default function OrderTable() {
     const [order] = useState('asc');
-    const [orderBy] = useState('trackingNo');
+    const [orderBy] = useState('NIM');
     const [selected] = useState([]);
 
-    const isSelected = (trackingNo) => selected.indexOf(trackingNo) !== -1;
+    const isSelected = (NIM) => selected.indexOf(NIM) !== -1;
 
     return (
         <Box>
@@ -187,7 +183,7 @@ export default function OrderTable() {
                     <OrderTableHead order={order} orderBy={orderBy} />
                     <TableBody>
                         {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
-                            const isItemSelected = isSelected(row.trackingNo);
+                            const isItemSelected = isSelected(row.NIM);
                             const labelId = `enhanced-table-checkbox-${index}`;
 
                             return (
@@ -197,21 +193,22 @@ export default function OrderTable() {
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     aria-checked={isItemSelected}
                                     tabIndex={-1}
-                                    key={row.trackingNo}
+                                    key={row.NIM}
                                     selected={isItemSelected}
                                 >
                                     <TableCell component="th" id={labelId} scope="row" align="left">
                                         <Link color="secondary" component={RouterLink} to="">
-                                            {row.trackingNo}
+                                            {row.NIM}
                                         </Link>
                                     </TableCell>
                                     <TableCell align="left">{row.name}</TableCell>
-                                    <TableCell align="right">{row.fat}</TableCell>
+                                    <TableCell align="left">{row.numCourses}</TableCell>
                                     <TableCell align="left">
-                                        <OrderStatus status={row.carbs} />
+                                        <NumberFormat value={row.emission} displayType="text" thousandSeparator />
+                                        &nbsp;kg CO<sub>2</sub>
                                     </TableCell>
-                                    <TableCell align="right">
-                                        <NumberFormat value={row.protein} displayType="text" thousandSeparator prefix="$" />
+                                    <TableCell align="center">
+                                        <OrderStatus status={row.level} />
                                     </TableCell>
                                 </TableRow>
                             );
