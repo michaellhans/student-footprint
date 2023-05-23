@@ -43,6 +43,7 @@ import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
 import ActionProgressBar from './ActionProgressBar';
+import ExamBarChart from './ExamBarChart';
 
 // avatar style
 const avatarSX = {
@@ -273,10 +274,10 @@ const DashboardDefault = () => {
                 </MainCard>
             </Grid>
 
-            <Grid item xs={12} md={5} lg={4}>
+            <Grid item xs={12} md={6}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
-                        <Typography variant="h5">Your Weekly Carbon Footprint</Typography>
+                        <Typography variant="h5">Classes Emission Comparison</Typography>
                     </Grid>
                     <Grid item />
                 </Grid>
@@ -284,25 +285,31 @@ const DashboardDefault = () => {
                     <Box sx={{ p: 3, pb: 0 }}>
                         <Stack spacing={2}>
                             <Typography variant="h6" color="textSecondary">
-                                This Week Statistics
+                                May Period Statistics
                             </Typography>
-                            <Typography variant="h3">50.4 kg CO2e</Typography>
+                            <Typography variant="h3">50.4 kg CO2e produced from Electricity</Typography>
                         </Stack>
                     </Box>
                     <MonthlyBarChart />
                 </MainCard>
             </Grid>
-
-            {/* row 3 */}
-            <Grid item xs={12} md={7} lg={8}>
+            <Grid item xs={12} md={6}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
-                        <Typography variant="h5">Student Emissions List</Typography>
+                        <Typography variant="h5">Paper-based vs Electronic-based</Typography>
                     </Grid>
                     <Grid item />
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
-                    <OrdersTable />
+                    <Box sx={{ p: 3, pb: 0 }}>
+                        <Stack spacing={2}>
+                            <Typography variant="h6" color="textSecondary">
+                                May Period Statistics
+                            </Typography>
+                            <Typography variant="h3">Paper-based is 30% greener</Typography>
+                        </Stack>
+                    </Box>
+                    <ExamBarChart />
                 </MainCard>
             </Grid>
         </Grid>

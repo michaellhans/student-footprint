@@ -81,7 +81,7 @@ const barChartOptions = {
 
 // ==============================|| MONTHLY BAR CHART ||============================== //
 
-const MonthlyBarChart = () => {
+const ExamBarChart = () => {
     const theme = useTheme();
 
     const { primary, secondary } = theme.palette.text;
@@ -118,15 +118,15 @@ const MonthlyBarChart = () => {
             <Stack direction="column" spacing={0.5} alignItems="flex-start" justifyContent="flex-start" sx={{ p: 2, pt: 0, pl: '30%' }}>
                 <Stack direction="row" spacing={2}>
                     <YesCircle />
-                    <Typography variant="caption">Required electronic device</Typography>
+                    <Typography variant="caption">Electronic-based exam</Typography>
                 </Stack>
                 <Stack direction="row" spacing={2}>
                     <NoCircle />
-                    <Typography variant="caption">Doesn't required electronic device</Typography>
+                    <Typography variant="caption">Paper-based exam</Typography>
                 </Stack>
             </Stack>
         </div>
     );
 };
 
-export default MonthlyBarChart;
+export default ExamBarChart;
