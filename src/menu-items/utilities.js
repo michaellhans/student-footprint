@@ -38,21 +38,6 @@ const utilities = {
             type: 'item',
             url: '/color',
             icon: icons.BgColorsOutlined
-        },
-        {
-            id: 'util-shadow',
-            title: 'Shadow',
-            type: 'item',
-            url: '/shadow',
-            icon: icons.BarcodeOutlined
-        },
-        {
-            id: 'ant-icons',
-            title: 'Ant Icons',
-            type: 'item',
-            url: '/icons/ant',
-            icon: icons.AntDesignOutlined,
-            breadcrumbs: false
         }
     ]
 };

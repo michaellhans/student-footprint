@@ -1,67 +1,25 @@
 import { useState, Fragment } from 'react';
-import dayjs from 'dayjs';
 
 // material-ui
-import {
-    Avatar,
-    AvatarGroup,
-    Box,
-    Button,
-    FormControl,
-    Grid,
-    InputLabel,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemButton,
-    ListItemSecondaryAction,
-    ListItemText,
-    MenuItem,
-    Stack,
-    TextField,
-    Typography
-} from '@mui/material';
+import { Avatar, Button, FormControl, Grid, ListItem, ListItemAvatar, ListItemText, MenuItem, Stack, Typography } from '@mui/material';
 
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 
 import { DatePicker } from '@mui/x-date-pickers-pro';
 
 // project import
-import OrdersTable from './OrdersTable';
+import EmissionTable from './EmissionTable';
 import MainCard from 'components/MainCard';
 import avatar2 from 'assets/images/users/avatar-2.png';
-
-// sales report status
-const status = [
-    {
-        value: 'today',
-        label: 'Today'
-    },
-    {
-        value: 'month',
-        label: 'This Month'
-    },
-    {
-        value: 'year',
-        label: 'This Year'
-    }
-];
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const DataView = () => {
-    const [value, setValue] = useState('today');
     const [level, setLevel] = useState('major');
     const [slot, setSlot] = useState(level);
-    const [major, setMajor] = useState('IF');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [semester, setSemester] = useState('Day');
-    const [year, setYear] = useState(2023);
-
-    const handleMajorChange = (event) => {
-        setMajor(event.target.value);
-    };
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    const [timeframe, setTimeframe] = useState('Day');
 
     const handleStartDateChange = (value) => {
         setStartDate(value.toDate());
@@ -133,7 +91,7 @@ const DataView = () => {
                             <Stack spacing={0.5}>
                                 <Typography>Timeframe</Typography>
                                 <FormControl>
-                                    <Select value={semester} onChange={(event) => setSemester(event.target.value)} label="Semester">
+                                    <Select value={timeframe} onChange={(event) => setTimeframe(event.target.value)} label="Semester">
                                         <MenuItem value={'Day'}>Day</MenuItem>
                                         <MenuItem value={'Week'}>Week</MenuItem>
                                         <MenuItem value={'Month'}>Month</MenuItem>
@@ -146,13 +104,13 @@ const DataView = () => {
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
                             <Stack spacing={0.5}>
                                 <Typography>Start Period</Typography>
-                                <DatePicker value={startDate} onChange={handleStartDateChange} />
+                                <DatePicker defaultDate={new Date()} value={startDate} onChange={handleStartDateChange} />
                             </Stack>
                         </Grid>
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
                             <Stack spacing={0.5}>
                                 <Typography>End Period</Typography>
-                                <DatePicker value={endDate} onChange={handleEndDateChange} />
+                                <DatePicker defaultDate={new Date()} value={endDate} onChange={handleEndDateChange} />
                             </Stack>
                         </Grid>
                     </Grid>
@@ -180,17 +138,17 @@ const DataView = () => {
                             </Button>
                             <Button
                                 size="small"
-                                onClick={() => setSlot('time')}
-                                color={slot === 'time' ? 'primary' : 'secondary'}
-                                variant={slot === 'time' ? 'outlined' : 'text'}
+                                onClick={() => setSlot(timeframe)}
+                                color={slot === timeframe ? 'primary' : 'secondary'}
+                                variant={slot === timeframe ? 'outlined' : 'text'}
                             >
-                                Week
+                                {timeframe}
                             </Button>
                         </Stack>
                     </Grid>
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
-                    <OrdersTable />
+                    <EmissionTable />
                 </MainCard>
             </Grid>
         </Grid>

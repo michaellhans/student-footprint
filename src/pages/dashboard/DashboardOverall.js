@@ -1,106 +1,57 @@
 import { useState, Fragment } from 'react';
-import dayjs from 'dayjs';
 
 // material-ui
 import {
     Avatar,
-    AvatarGroup,
     Box,
     Button,
     FormControl,
     Grid,
-    InputLabel,
     List,
     ListItem,
     ListItemAvatar,
-    ListItemButton,
-    ListItemSecondaryAction,
     ListItemText,
     MenuItem,
     Stack,
-    TextField,
     Typography
 } from '@mui/material';
 
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 
 import { DatePicker } from '@mui/x-date-pickers-pro';
 
 // project import
-import OrdersTable from './OrdersTable';
-import IncomeAreaChart from './IncomeAreaChart';
-import MonthlyBarChart from './MonthlyBarChart';
-import ReportAreaChart from './ReportAreaChart';
-import SalesColumnChart from './SalesColumnChart';
+import EmissionPrediction from './EmissionPrediction';
+import EmissionComparison from './EmissionComparison';
 import EmissionDistribution from './EmissionDistribution';
 import MainCard from 'components/MainCard';
-import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
+import HighlightProfile from 'components/cards/statistics/HighlightProfile';
 
 // assets
-import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
-import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
-import avatar3 from 'assets/images/users/avatar-3.png';
-import avatar4 from 'assets/images/users/avatar-4.png';
-import ActionProgressBar from './ActionProgressBar';
-import ExamBarChart from './ExamBarChart';
-
-// avatar style
-const avatarSX = {
-    width: 36,
-    height: 36,
-    fontSize: '1rem'
-};
-
-// action style
-const actionSX = {
-    mt: 0.75,
-    ml: 1,
-    top: 'auto',
-    right: 'auto',
-    alignSelf: 'flex-start',
-    transform: 'none'
-};
-
-// sales report status
-const status = [
-    {
-        value: 'today',
-        label: 'Today'
-    },
-    {
-        value: 'month',
-        label: 'This Month'
-    },
-    {
-        value: 'year',
-        label: 'This Year'
-    }
-];
+import GreenAction from './GreenAction';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
-const DashboardDefault = () => {
-    const [value, setValue] = useState('today');
+const DashboardOverall = () => {
     const [slot, setSlot] = useState('week');
-    const [major, setMajor] = useState('IF');
-    const [date, setDate] = useState('');
-    const [semester, setSemester] = useState('Day');
-    const [year, setYear] = useState(2023);
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    const [timeframe, setTimeframe] = useState('Day');
 
-    const handleMajorChange = (event) => {
-        setMajor(event.target.value);
+    const handleStartDateChange = (value) => {
+        setStartDate(value.toDate());
     };
 
-    const handleDateChange = (value) => {
-        setDate(value.toDate());
+    const handleEndDateChange = (value) => {
+        setEndDate(value.toDate());
     };
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             {/* row 1 */}
             <Grid item xs={12} sx={{ mb: -2.25 }}>
-                <Typography variant="h5">Dashboard</Typography>
+                <Typography variant="h5">Overall Dashboard</Typography>
             </Grid>
             <Grid item xs={12} sm={12}>
                 <MainCard contentSX={{ p: 2.25 }}>
@@ -127,7 +78,7 @@ const DashboardDefault = () => {
                             <Stack spacing={0.5}>
                                 <Typography>Timeframe</Typography>
                                 <FormControl>
-                                    <Select value={semester} onChange={(event) => setSemester(event.target.value)} label="Semester">
+                                    <Select value={timeframe} onChange={(event) => setTimeframe(event.target.value)} label="Timeframe">
                                         <MenuItem value={'Day'}>Day</MenuItem>
                                         <MenuItem value={'Week'}>Week</MenuItem>
                                         <MenuItem value={'Month'}>Month</MenuItem>
@@ -140,26 +91,26 @@ const DashboardDefault = () => {
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
                             <Stack spacing={0.5}>
                                 <Typography>Start Period</Typography>
-                                <DatePicker value={date} onChange={handleDateChange} />
+                                <DatePicker value={startDate} onChange={handleStartDateChange} />
                             </Stack>
                         </Grid>
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
                             <Stack spacing={0.5}>
                                 <Typography>End Period</Typography>
-                                <DatePicker value={date} onChange={handleDateChange} />
+                                <DatePicker value={endDate} onChange={handleEndDateChange} />
                             </Stack>
                         </Grid>
                     </Grid>
                 </MainCard>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Carbon Footprint" count="18.80 kg CO2e" percentage={27.4} isLoss color="warning" extra="1,943" />
+                <HighlightProfile title="Carbon Footprint" count="18.80 kg CO2e" percentage={27.4} isLoss color="warning" extra="1,943" />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Distance to Campus" count="4.5 km" percentage={59.3} extra="35,000" />
+                <HighlightProfile title="Distance to Campus" count="4.5 km" percentage={59.3} extra="35,000" />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <AnalyticEcommerce title="Laptop usage" count="8.5 hours" percentage={27.4} isLoss color="warning" extra="1,943" />
+                <HighlightProfile title="Laptop usage" count="8.5 hours" percentage={27.4} isLoss color="warning" extra="1,943" />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <MainCard contentSX={{ p: 2.25 }}>
@@ -216,7 +167,7 @@ const DashboardDefault = () => {
                 </Grid>
                 <MainCard content={false} sx={{ mt: 1.5 }}>
                     <Box sx={{ pt: 1, pr: 2 }}>
-                        <IncomeAreaChart slot={slot} />
+                        <EmissionPrediction slot={slot} />
                     </Box>
                 </MainCard>
             </Grid>
@@ -227,10 +178,10 @@ const DashboardDefault = () => {
                     </Grid>
                 </Grid>
                 <Grid sx={{ mt: 2, mb: 4 }}>
-                    <ActionProgressBar />
-                    <ActionProgressBar />
-                    <ActionProgressBar />
-                    <ActionProgressBar />
+                    <GreenAction id={1} />
+                    <GreenAction id={2} />
+                    <GreenAction id={3} />
+                    <GreenAction id={4} />
                 </Grid>
             </Grid>
 
@@ -290,7 +241,7 @@ const DashboardDefault = () => {
                             <Typography variant="h3">50.4 kg CO2e produced from Electricity</Typography>
                         </Stack>
                     </Box>
-                    <MonthlyBarChart />
+                    <EmissionComparison isExam={false} />
                 </MainCard>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -309,11 +260,11 @@ const DashboardDefault = () => {
                             <Typography variant="h3">Paper-based is 30% greener</Typography>
                         </Stack>
                     </Box>
-                    <ExamBarChart />
+                    <EmissionComparison isExam={true} />
                 </MainCard>
             </Grid>
         </Grid>
     );
 };
 
-export default DashboardDefault;
+export default DashboardOverall;

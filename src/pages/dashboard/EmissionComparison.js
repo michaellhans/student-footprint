@@ -7,6 +7,7 @@ import { useTheme } from '@mui/material/styles';
 
 // third-party
 import ReactApexChart from 'react-apexcharts';
+import PropTypes from 'prop-types';
 
 const YesCircle = styled('div')({
     margin: 'auto',
@@ -79,17 +80,32 @@ const barChartOptions = {
     }
 };
 
-// ==============================|| MONTHLY BAR CHART ||============================== //
+const electronic = {
+    yes: 'Required electronic device',
+    no: "Doesn't required electronic device"
+};
 
-const MonthlyBarChart = () => {
+const exam = {
+    yes: 'Electronic-based exam',
+    no: 'Paper-based exam'
+};
+
+// ==============================|| COURSES EMISSION BAR CHART ||============================== //
+
+EmissionComparison.propTypes = {
+    isExam: PropTypes.bool
+};
+
+const EmissionComparison = ({ isExam }) => {
     const theme = useTheme();
+    console.log(isExam);
 
     const { primary, secondary } = theme.palette.text;
     const info = theme.palette.info.light;
 
     const [series] = useState([
         {
-            data: [80, 95, 70, 42, 65, 55, 78]
+            data: [80, 95, 70, 78, 65, 55, 42]
         }
     ]);
 
@@ -118,15 +134,15 @@ const MonthlyBarChart = () => {
             <Stack direction="column" spacing={0.5} alignItems="flex-start" justifyContent="flex-start" sx={{ p: 2, pt: 0, pl: '30%' }}>
                 <Stack direction="row" spacing={2}>
                     <YesCircle />
-                    <Typography variant="caption">Required electronic device</Typography>
+                    <Typography variant="caption">{isExam ? exam.yes : electronic.yes}</Typography>
                 </Stack>
                 <Stack direction="row" spacing={2}>
                     <NoCircle />
-                    <Typography variant="caption">Doesn't required electronic device</Typography>
+                    <Typography variant="caption">{isExam ? exam.no : electronic.no}</Typography>
                 </Stack>
             </Stack>
         </div>
     );
 };
 
-export default MonthlyBarChart;
+export default EmissionComparison;

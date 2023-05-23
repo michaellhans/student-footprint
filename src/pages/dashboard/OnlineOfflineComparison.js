@@ -81,7 +81,7 @@ const columnChartOptions = {
 
 // ==============================|| SALES COLUMN CHART ||============================== //
 
-const SalesColumnChart = () => {
+const OnlineOfflineComparison = () => {
     const theme = useTheme();
 
     const { primary, secondary } = theme.palette.text;
@@ -145,4 +145,4 @@ const SalesColumnChart = () => {
     );
 };
 
-export default SalesColumnChart;
+export default OnlineOfflineComparison;

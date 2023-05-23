@@ -30,7 +30,7 @@ const areaChartOptions = {
 
 // ==============================|| INCOME AREA CHART ||============================== //
 
-const IncomeAreaChart = ({ slot }) => {
+const EmissionPrediction = ({ slot }) => {
     const theme = useTheme();
 
     const { primary, secondary } = theme.palette.text;
@@ -114,8 +114,8 @@ const IncomeAreaChart = ({ slot }) => {
     return <ReactApexChart options={options} series={series} type="area" height={450} />;
 };
 
-IncomeAreaChart.propTypes = {
+EmissionPrediction.propTypes = {
     slot: PropTypes.string
 };
 
-export default IncomeAreaChart;
+export default EmissionPrediction;

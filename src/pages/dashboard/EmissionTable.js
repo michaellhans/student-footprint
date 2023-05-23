@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
-import { Box, Link, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Box, Link, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Tag } from 'antd';
 
 // third-party
@@ -89,7 +89,7 @@ const headCells = [
 
 // ==============================|| ORDER TABLE - HEADER ||============================== //
 
-function OrderTableHead({ order, orderBy }) {
+function EmissionTableHead({ order, orderBy }) {
     return (
         <TableHead>
             <TableRow>
@@ -108,7 +108,7 @@ function OrderTableHead({ order, orderBy }) {
     );
 }
 
-OrderTableHead.propTypes = {
+EmissionTableHead.propTypes = {
     order: PropTypes.string,
     orderBy: PropTypes.string
 };
@@ -150,7 +150,7 @@ OrderStatus.propTypes = {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function OrderTable() {
+export default function EmissionTable() {
     const [order] = useState('asc');
     const [orderBy] = useState('NIM');
     const [selected] = useState([]);
@@ -180,7 +180,7 @@ export default function OrderTable() {
                         }
                     }}
                 >
-                    <OrderTableHead order={order} orderBy={orderBy} />
+                    <EmissionTableHead order={order} orderBy={orderBy} />
                     <TableBody>
                         {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
                             const isItemSelected = isSelected(row.NIM);

@@ -1,9 +1,12 @@
 // assets
-import { DashboardOutlined } from '@ant-design/icons';
+import { DashboardOutlined, TableOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
 
 // icons
 const icons = {
-    DashboardOutlined
+    DashboardOutlined,
+    TableOutlined,
+    TeamOutlined,
+    UserOutlined
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -17,8 +20,24 @@ const dashboard = {
             id: 'dashboard',
             title: 'Dashboard',
             type: 'item',
-            url: '/dashboard/default',
+            url: '/dashboard',
             icon: icons.DashboardOutlined,
+            breadcrumbs: false
+        },
+        {
+            id: 'major',
+            title: 'Major',
+            type: 'item',
+            url: '/major',
+            icon: icons.TeamOutlined,
+            breadcrumbs: false
+        },
+        {
+            id: 'student',
+            title: 'Student',
+            type: 'item',
+            url: '/student',
+            icon: icons.UserOutlined,
             breadcrumbs: false
         },
         {
@@ -26,7 +45,7 @@ const dashboard = {
             title: 'Data View',
             type: 'item',
             url: '/data-view',
-            icon: icons.DashboardOutlined,
+            icon: icons.TableOutlined,
             breadcrumbs: false
         }
     ]
