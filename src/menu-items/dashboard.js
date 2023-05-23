@@ -20,6 +20,14 @@ const dashboard = {
             url: '/dashboard/default',
             icon: icons.DashboardOutlined,
             breadcrumbs: false
+        },
+        {
+            id: 'data-view',
+            title: 'Data View',
+            type: 'item',
+            url: '/data-view',
+            icon: icons.DashboardOutlined,
+            breadcrumbs: false
         }
     ]
 };

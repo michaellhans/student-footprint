@@ -74,16 +74,16 @@ const headCells = [
         label: 'Courses taken'
     },
     {
-        id: 'level',
-        align: 'left',
-        disablePadding: false,
-        label: 'Emission Level'
-    },
-    {
         id: 'emission',
         align: 'left',
         disablePadding: false,
         label: 'Total Emission'
+    },
+    {
+        id: 'level',
+        align: 'left',
+        disablePadding: false,
+        label: 'Emission Level'
     }
 ];
 

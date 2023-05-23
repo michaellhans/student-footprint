@@ -9,10 +9,15 @@ import MainCard from 'components/MainCard';
 const SamplePage = () => (
     <MainCard title="Sample Card">
         <Typography variant="body2">
-            Lorem ipsum dolor sit amen, consenter nipissing eli, sed do elusion tempos incident ut laborers et doolie magna alissa. Ut enif
-            ad minim venice, quin nostrum exercitation illampu laborings nisi ut liquid ex ea commons construal. Duos aube grue dolor in
-            reprehended in voltage veil esse colum doolie eu fujian bulla parian. Exceptive sin ocean cuspidate non president, sunk in culpa
-            qui officiate descent molls anim id est labours.
+            <ol>
+                <li>Predict the ITB emission in a DD-MM-YYYY</li>
+                <li>Predict the ITB emission in the next 2 days</li>
+                <li>Predict the major emission (IF / STI / MIF)</li>
+                <li>Predict the course emission (IF6099 Thesis)</li>
+                <li>Predict the student emission (Michael Hans)</li>
+                <li>Classifiy emission levels from each student and activity</li>
+                <li>Show the emission graph in a year / month / week</li>
+            </ol>
         </Typography>
     </MainCard>
 );
