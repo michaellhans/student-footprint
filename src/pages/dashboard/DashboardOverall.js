@@ -203,9 +203,9 @@ const DashboardOverall = () => {
                     <Box sx={{ p: 3, pb: 2 }}>
                         <Stack spacing={2}>
                             <Typography variant="h6" color="textSecondary">
-                                Emission Category Distribution
+                                Emission In-Class vs Out-Class
                             </Typography>
-                            <Typography>Commuting contribute the highest emission</Typography>
+                            <Typography>Out-class activity contribute the most on learning</Typography>
                         </Stack>
                     </Box>
                     <EmissionDistribution />
@@ -216,7 +216,7 @@ const DashboardOverall = () => {
                     <Box sx={{ p: 3, pb: 2 }}>
                         <Stack spacing={2}>
                             <Typography variant="h6" color="textSecondary">
-                                Emission Category Distribution
+                                Emission Activity Distribution
                             </Typography>
                             <Typography>Commuting contribute the highest emission</Typography>
                         </Stack>
