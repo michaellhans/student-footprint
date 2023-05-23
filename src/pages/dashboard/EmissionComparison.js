@@ -96,9 +96,8 @@ EmissionComparison.propTypes = {
     isExam: PropTypes.bool
 };
 
-const EmissionComparison = ({ isExam }) => {
+function EmissionComparison({ isExam }) {
     const theme = useTheme();
-    console.log(isExam);
 
     const { primary, secondary } = theme.palette.text;
     const info = theme.palette.info.light;
@@ -143,6 +142,6 @@ const EmissionComparison = ({ isExam }) => {
             </Stack>
         </div>
     );
-};
+}
 
 export default EmissionComparison;

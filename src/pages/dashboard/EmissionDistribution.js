@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react';
-
-// material-ui
-import { useTheme } from '@mui/material/styles';
+import { useState } from 'react';
 
 // third-party
 import ReactApexChart from 'react-apexcharts';
@@ -31,8 +28,6 @@ const pieChartOptions = {
 // ==============================|| MONTHLY BAR CHART ||============================== //
 
 const EmissionDistribution = () => {
-    const theme = useTheme();
-
     const [series] = useState([44, 55, 13, 43, 22]);
     const [options] = useState(pieChartOptions);
 

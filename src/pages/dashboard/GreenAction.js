@@ -20,6 +20,7 @@ GreenAction.propTypes = {
 };
 
 function GreenAction({ id }) {
+    const reduction = 100 - Math.random() * 100;
     return (
         <MainCard
             sx={{
@@ -36,11 +37,11 @@ function GreenAction({ id }) {
                 <Grid item xs={12} sm container direction="column" spacing={0.5}>
                     <Grid item xs>
                         <Typography gutterBottom variant="subtitle1" component="div">
-                            You can reduce 20% carbon with {id % 2 == 0 ? 'walking' : 'energy saving'}
+                            You can reduce {reduction}% carbon with {id % 2 == 0 ? 'walking' : 'energy saving'}
                         </Typography>
                     </Grid>
                     <Grid item xs>
-                        <ProgressBar now={Math.random() * 100} style={{ height: 22 }} animated variant="danger" />
+                        <ProgressBar now={reduction} style={{ height: 22 }} animated variant="danger" />
                     </Grid>
                 </Grid>
             </Grid>
