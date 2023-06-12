@@ -37,6 +37,7 @@ const DashboardMajor = () => {
     const [slot, setSlot] = useState('week');
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
+    const [major, setMajor] = useState('');
     const [timeframe, setTimeframe] = useState('Day');
 
     const handleStartDateChange = (value) => {
@@ -57,22 +58,16 @@ const DashboardMajor = () => {
                 <MainCard contentSX={{ p: 2.25 }}>
                     <Grid container spacing={3}>
                         <Grid item xs={12} lg={4}>
-                            <ListItem alignItems="flex-start">
-                                <ListItemAvatar>
-                                    <Avatar alt="profile user" src={avatar2} />
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary="Michael Hans"
-                                    secondary={
-                                        <Fragment>
-                                            <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
-                                                23522011
-                                            </Typography>
-                                            {' / Master of Informatics '}
-                                        </Fragment>
-                                    }
-                                />
-                            </ListItem>
+                            <Stack spacing={0.5}>
+                                <Typography>Major</Typography>
+                                <FormControl>
+                                    <Select value={major} onChange={(event) => setMajor(event.target.value)} label="Major">
+                                        <MenuItem value={'IF'}>Bachelor of Informatics</MenuItem>
+                                        <MenuItem value={'STI'}>Bachelor of Information System and Technology</MenuItem>
+                                        <MenuItem value={'MIF'}>Master of Informatics</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Stack>
                         </Grid>
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
                             <Stack spacing={0.5}>
@@ -195,7 +190,7 @@ const DashboardMajor = () => {
                             <Typography>Commuting contribute the highest emission</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution />
+                    <EmissionDistribution id={1} />
                 </MainCard>
             </Grid>
             <Grid item xs={12} md={5} lg={4}>
@@ -203,12 +198,12 @@ const DashboardMajor = () => {
                     <Box sx={{ p: 3, pb: 2 }}>
                         <Stack spacing={2}>
                             <Typography variant="h6" color="textSecondary">
-                                Emission Category Distribution
+                                Emission In-Class vs Out-Class
                             </Typography>
-                            <Typography>Commuting contribute the highest emission</Typography>
+                            <Typography>Out-class activity contribute the most on learning</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution />
+                    <EmissionDistribution id={2} />
                 </MainCard>
             </Grid>
             <Grid item xs={12} md={5} lg={4}>
@@ -216,12 +211,12 @@ const DashboardMajor = () => {
                     <Box sx={{ p: 3, pb: 2 }}>
                         <Stack spacing={2}>
                             <Typography variant="h6" color="textSecondary">
-                                Emission Category Distribution
+                                Emission Activity Distribution
                             </Typography>
-                            <Typography>Commuting contribute the highest emission</Typography>
+                            <Typography>Coursework contribute the highest emission</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution />
+                    <EmissionDistribution id={3} />
                 </MainCard>
             </Grid>
 

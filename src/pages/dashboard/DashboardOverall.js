@@ -195,7 +195,7 @@ const DashboardOverall = () => {
                             <Typography>Commuting contribute the highest emission</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution />
+                    <EmissionDistribution id={1} />
                 </MainCard>
             </Grid>
             <Grid item xs={12} md={5} lg={4}>
@@ -208,7 +208,7 @@ const DashboardOverall = () => {
                             <Typography>Out-class activity contribute the most on learning</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution />
+                    <EmissionDistribution id={2} />
                 </MainCard>
             </Grid>
             <Grid item xs={12} md={5} lg={4}>
@@ -218,10 +218,10 @@ const DashboardOverall = () => {
                             <Typography variant="h6" color="textSecondary">
                                 Emission Activity Distribution
                             </Typography>
-                            <Typography>Commuting contribute the highest emission</Typography>
+                            <Typography>Coursework contribute the highest emission</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution />
+                    <EmissionDistribution id={3} />
                 </MainCard>
             </Grid>
 

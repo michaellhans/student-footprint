@@ -8,10 +8,10 @@ import { useTheme } from '@mui/material/styles';
 import ReactApexChart from 'react-apexcharts';
 
 // chart options
-const areaChartOptions = {
+const lineChartOptions = {
     chart: {
         height: 450,
-        type: 'area',
+        type: 'line',
         toolbar: {
             show: false
         }
@@ -28,7 +28,7 @@ const areaChartOptions = {
     }
 };
 
-// ==============================|| INCOME AREA CHART ||============================== //
+// ==============================|| INCOME LINE CHART ||============================== //
 
 const EmissionPrediction = ({ slot }) => {
     const theme = useTheme();
@@ -36,12 +36,12 @@ const EmissionPrediction = ({ slot }) => {
     const { primary, secondary } = theme.palette.text;
     const line = theme.palette.divider;
 
-    const [options, setOptions] = useState(areaChartOptions);
+    const [options, setOptions] = useState(lineChartOptions);
 
     useEffect(() => {
         setOptions((prevState) => ({
             ...prevState,
-            colors: [theme.palette.primary.main, theme.palette.primary[700]],
+            colors: [theme.palette.primary.main, theme.palette.primary[900]],
             xaxis: {
                 categories:
                     slot === 'month'
@@ -70,6 +70,11 @@ const EmissionPrediction = ({ slot }) => {
                     color: line
                 },
                 tickAmount: slot === 'month' ? 11 : 7
+            },
+            forecastDataPoints: {
+                count: slot === 'month' ? 4 : 3,
+                fillOpacity: 0.5,
+                dashArray: 4
             },
             yaxis: {
                 labels: {
@@ -111,7 +116,7 @@ const EmissionPrediction = ({ slot }) => {
         ]);
     }, [slot]);
 
-    return <ReactApexChart options={options} series={series} type="area" height={450} />;
+    return <ReactApexChart options={options} series={series} type="line" height={450} />;
 };
 
 EmissionPrediction.propTypes = {

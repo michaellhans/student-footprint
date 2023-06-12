@@ -194,7 +194,7 @@ const DashboardStudent = () => {
                             <Typography>Commuting contribute the highest emission</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution />
+                    <EmissionDistribution id={1} />
                 </MainCard>
             </Grid>
             <Grid item xs={12} md={5} lg={4}>
@@ -202,12 +202,12 @@ const DashboardStudent = () => {
                     <Box sx={{ p: 3, pb: 2 }}>
                         <Stack spacing={2}>
                             <Typography variant="h6" color="textSecondary">
-                                Emission Category Distribution
+                                Emission In-Class vs Out-Class
                             </Typography>
-                            <Typography>Commuting contribute the highest emission</Typography>
+                            <Typography>Out-class activity contribute the most on learning</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution />
+                    <EmissionDistribution id={2} />
                 </MainCard>
             </Grid>
             <Grid item xs={12} md={5} lg={4}>
@@ -215,12 +215,12 @@ const DashboardStudent = () => {
                     <Box sx={{ p: 3, pb: 2 }}>
                         <Stack spacing={2}>
                             <Typography variant="h6" color="textSecondary">
-                                Emission Category Distribution
+                                Emission Activity Distribution
                             </Typography>
-                            <Typography>Commuting contribute the highest emission</Typography>
+                            <Typography>Coursework contribute the highest emission</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution />
+                    <EmissionDistribution id={3} />
                 </MainCard>
             </Grid>
         </Grid>

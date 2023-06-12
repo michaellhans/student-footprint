@@ -1,41 +1,75 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 // third-party
 import ReactApexChart from 'react-apexcharts';
+import { EMISSION_ACTIVITY, EMISSION_CATEGORY, EMISSION_IN_OUT_CLASS } from 'api/mockData';
+import { styled } from '@mui/material/styles';
+import { CircularProgress } from '@mui/material';
+import { useSelector } from '../../../node_modules/react-redux/es/exports';
 
 // chart options
-const pieChartOptions = {
-    chart: {
-        width: 380,
-        type: 'pie'
-    },
-    labels: ['Electricity', 'Commuting', 'Paper', 'Laboratory', 'Lifestyle'],
-    responsive: [
-        {
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 200
-                },
-                legend: {
-                    position: 'bottom'
+function pieChartOptions(labels) {
+    return {
+        chart: {
+            width: 380,
+            type: 'pie'
+        },
+        labels: labels.map((string) => string.charAt(0).toUpperCase() + string.slice(1)),
+        responsive: [
+            {
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
                 }
             }
-        }
-    ]
-};
+        ]
+    };
+}
 
 // ==============================|| MONTHLY BAR CHART ||============================== //
 
-const EmissionDistribution = () => {
-    const [series] = useState([44, 55, 13, 43, 22]);
-    const [options] = useState(pieChartOptions);
+const StyledLoading = styled('div')(() => ({
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center'
+}));
 
-    return (
+EmissionDistribution.propTypes = {
+    id: PropTypes.number
+};
+
+function EmissionDistribution({ id }) {
+    const student = useSelector((state) => state.student);
+    let distribution = student.cf_activity;
+    console.log(student);
+    console.log(distribution);
+    console.log(Object.values(distribution));
+    console.log(Object.keys(distribution));
+    if (id === 1) {
+        distribution = student.cf_category;
+    } else if (id === 2) {
+        distribution = student.cf_in_out;
+    }
+
+    const [series] = useState(Object.values(distribution) || []);
+    const [options] = useState(pieChartOptions(Object.keys(distribution) || []));
+    const [isLoading] = useState(false);
+
+    return isLoading ? (
+        <StyledLoading>
+            <CircularProgress color="secondary" />
+        </StyledLoading>
+    ) : (
         <div id="chart">
             <ReactApexChart options={options} series={series} type="pie" width={380} />
         </div>
     );
-};
+}
 
 export default EmissionDistribution;
