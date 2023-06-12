@@ -22,7 +22,8 @@ const initialState = {
         in_class: 0,
         out_class: 0
     },
-    cf_history: []
+    cf_history: [],
+    profile: null
 };
 
 // ==============================|| SLICE - STUDENT ||============================== //

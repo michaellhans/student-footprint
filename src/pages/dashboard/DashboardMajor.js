@@ -173,7 +173,7 @@ const DashboardMajor = () => {
             <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 
             {/* row 2 */}
-            <Grid item xs={12} md={7} lg={7.5}>
+            <Grid item xs={12} md={8}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
                         <Typography variant="h5">Carbon Footprint From Time to Time</Typography>
@@ -205,7 +205,7 @@ const DashboardMajor = () => {
                     </Box>
                 </MainCard>
             </Grid>
-            <Grid item xs={12} md={5} lg={4.5}>
+            <Grid item xs={12} md={4}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
                         <Typography variant="h5">Green Action</Typography>
@@ -275,7 +275,7 @@ const DashboardMajor = () => {
                             <Typography variant="h3">50.4 kg CO2e produced from Electricity</Typography>
                         </Stack>
                     </Box>
-                    <EmissionComparison isExam={false} />
+                    <EmissionComparison isExam={false} coursesEmission={majorData.cf_course_distribution} />
                 </MainCard>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -294,7 +294,7 @@ const DashboardMajor = () => {
                             <Typography variant="h3">Paper-based is 30% greener</Typography>
                         </Stack>
                     </Box>
-                    <EmissionComparison isExam={true} />
+                    <EmissionComparison isExam={true} coursesEmission={majorData.cf_course_distribution} />
                 </MainCard>
             </Grid>
         </Grid>

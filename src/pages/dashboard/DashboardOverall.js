@@ -177,7 +177,7 @@ const DashboardOverall = () => {
             <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 
             {/* row 2 */}
-            <Grid item xs={12} md={8} lg={8}>
+            <Grid item xs={12} md={8}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
                         <Typography variant="h5">Carbon Footprint From Time to Time</Typography>
@@ -209,7 +209,7 @@ const DashboardOverall = () => {
                     </Box>
                 </MainCard>
             </Grid>
-            <Grid item xs={12} md={4} lg={4}>
+            <Grid item xs={12} md={4}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
                         <Typography variant="h5">Green Action</Typography>

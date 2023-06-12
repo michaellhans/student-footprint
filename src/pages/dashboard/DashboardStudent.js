@@ -33,6 +33,7 @@ import { useDispatch, useSelector } from '../../../node_modules/react-redux/es/e
 import { calculateSuccess, startLoading } from 'store/reducers/student';
 import { formattedDate } from 'utils/format';
 import dayjs from 'dayjs';
+import StudentProfile from './StudentProfile';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
@@ -44,7 +45,8 @@ const DashboardStudent = () => {
     const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
     const [timeframe, setTimeframe] = useState('Day');
     const student = useSelector((state) => state.student);
-    const [isLoading, setIsLoading] = useState(student.isLoading);
+    const stdProfile = student.profile;
+    const [isProfilePage, setIsProfilePage] = useState(stdProfile == null);
 
     const dispatch = useDispatch();
 
@@ -55,6 +57,10 @@ const DashboardStudent = () => {
     const handleEndDateChange = (value) => {
         setEndDate(value);
     };
+
+    useEffect(() => {
+        setIsProfilePage(stdProfile == null);
+    }, [stdProfile]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -76,10 +82,12 @@ const DashboardStudent = () => {
             }
         };
         dispatch(startLoading);
-        fetchData().then(setIsLoading(student.isLoading));
+        fetchData();
     }, [startDate, endDate]);
 
-    return (
+    return isProfilePage ? (
+        <StudentProfile />
+    ) : (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             {/* row 1 */}
             <Grid item xs={12} sx={{ mb: -2.25 }}>
@@ -178,7 +186,7 @@ const DashboardStudent = () => {
             <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 
             {/* row 2 */}
-            <Grid item xs={12} md={7} lg={7.5}>
+            <Grid item xs={12} md={8}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
                         <Typography variant="h5">Carbon Footprint From Time to Time</Typography>
@@ -210,7 +218,7 @@ const DashboardStudent = () => {
                     </Box>
                 </MainCard>
             </Grid>
-            <Grid item xs={12} md={5} lg={4.5}>
+            <Grid item xs={12} md={4}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
                         <Typography variant="h5">Green Action</Typography>

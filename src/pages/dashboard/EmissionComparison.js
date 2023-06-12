@@ -93,39 +93,62 @@ const exam = {
 // ==============================|| COURSES EMISSION BAR CHART ||============================== //
 
 EmissionComparison.propTypes = {
-    isExam: PropTypes.bool
+    isExam: PropTypes.bool,
+    coursesEmission: PropTypes.object
 };
 
-function EmissionComparison({ isExam }) {
+function EmissionComparison({ isExam, coursesEmission }) {
     const theme = useTheme();
-
     const { primary, secondary } = theme.palette.text;
     const info = theme.palette.info.light;
 
-    const [series] = useState([
+    const [options, setOptions] = useState(barChartOptions);
+    console.log(barChartOptions.colors);
+    const [series, setSeries] = useState([
         {
             data: [80, 95, 70, 78, 65, 55, 42]
         }
     ]);
+    const [categories, setCategories] = useState([]);
+    const [colors, setColors] = useState([]);
 
-    const [options, setOptions] = useState(barChartOptions);
+    useEffect(() => {
+        // Extract list of total emission
+        const totalEmissionList = coursesEmission.map((item) => item.emission);
+
+        // Extract list of courses
+        const courseList = coursesEmission.map((item) => item.course_id + ' ' + item.course_name);
+
+        // Extract list of class electronic
+        const colorMapping = {
+            false: '#F5222D',
+            true: '#FAAD14'
+        };
+        const classElectronic = coursesEmission.map((item) => colorMapping[item.class_electronic]);
+
+        setSeries([{ data: totalEmissionList }]);
+        setCategories(courseList);
+        setColors(classElectronic);
+    }, [coursesEmission, isExam]);
 
     useEffect(() => {
         setOptions((prevState) => ({
             ...prevState,
+            // colors: colors.length > 0 ? [...colors] : ['#F5222D'],
             xaxis: {
                 labels: {
                     style: {
                         colors: [secondary, secondary, secondary, secondary, info, info, info]
                     }
-                }
+                },
+                categories: categories
             },
             tooltip: {
                 theme: 'light'
             }
         }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [primary, info, secondary]);
+    }, [primary, info, secondary, categories, colors]);
 
     return (
         <div id="chart">
