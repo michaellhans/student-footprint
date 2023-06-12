@@ -37,7 +37,7 @@ function GreenAction({ id }) {
                 <Grid item xs={12} sm container direction="column" spacing={0.5}>
                     <Grid item xs>
                         <Typography gutterBottom variant="subtitle1" component="div">
-                            You can reduce {parseInt(100 - reduction, 10)}% carbon with {id % 2 == 0 ? 'walking' : 'energy saving'}
+                            Reduce {parseInt(100 - reduction, 10)}% carbon with {id % 2 == 0 ? 'walking' : 'energy saving'}
                         </Typography>
                     </Grid>
                     <Grid item xs>

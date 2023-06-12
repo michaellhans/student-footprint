@@ -22,13 +22,14 @@ const initialState = {
         in_class: 0,
         out_class: 0
     },
-    cf_history: []
+    cf_history: [],
+    cf_course_distribution: []
 };
 
-// ==============================|| SLICE - STUDENT ||============================== //
+// ==============================|| SLICE - ITB ||============================== //
 
-const student = createSlice({
-    name: 'student',
+const itb = createSlice({
+    name: 'itb',
     initialState,
     reducers: {
         startLoading(state) {
@@ -46,10 +47,11 @@ const student = createSlice({
             state.cf_in_out = action.payload.details.cf_in_out;
             state.cf_activity = action.payload.details.cf_activity;
             state.cf_history = action.payload.details.cf_history;
+            state.cf_course_distribution = action.payload.details.cf_course_distribution;
         }
     }
 });
 
-export default student.reducer;
+export default itb.reducer;
 
-export const { startLoading, hasError, calculateSuccess } = student.actions;
+export const { startLoading, hasError, calculateSuccess } = itb.actions;

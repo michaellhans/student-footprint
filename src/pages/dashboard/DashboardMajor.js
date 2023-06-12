@@ -61,8 +61,8 @@ const DashboardMajor = () => {
         const fetchData = async () => {
             const params = new URLSearchParams({
                 major: major,
-                start_date: startDate ? formattedDate(startDate) : '2023-01-17',
-                end_date: endDate ? formattedDate(endDate) : '2023-04-20'
+                start_date: startDate ? formattedDate(startDate) : '2023-01-16',
+                end_date: endDate ? formattedDate(endDate) : '2023-05-30'
             });
             try {
                 const response = await fetch(`${url}?${params.toString()}`);

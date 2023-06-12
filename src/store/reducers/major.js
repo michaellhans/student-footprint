@@ -6,21 +6,21 @@ const initialState = {
     isLoading: true,
     error: false,
     cf_activity: {
-        commuting: 38.97771428571429,
-        electricity: 230.60360160000002,
-        exam: 0.31181783241379313,
-        lecture: 16.24315073504019,
-        practicum: 0.10223494736842106
+        commuting: 0,
+        electricity: 0,
+        exam: 0,
+        lecture: 0,
+        practicum: 0
     },
     cf_category: {
-        classroom: 9.814925254822402,
-        commuting: 38.97771428571429,
-        electricity: 230.60360160000002,
-        paper: 0.08875866
+        classroom: 0,
+        commuting: 0,
+        electricity: 0,
+        paper: 0
     },
     cf_in_out: {
-        in_class: 16.657203514822406,
-        out_class: 262.8277962857143
+        in_class: 0,
+        out_class: 0
     },
     cf_history: [],
     cf_course_distribution: []

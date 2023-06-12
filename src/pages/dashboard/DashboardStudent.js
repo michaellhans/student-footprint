@@ -44,6 +44,7 @@ const DashboardStudent = () => {
     const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
     const [timeframe, setTimeframe] = useState('Day');
     const student = useSelector((state) => state.student);
+    const [isLoading, setIsLoading] = useState(student.isLoading);
 
     const dispatch = useDispatch();
 
@@ -75,7 +76,7 @@ const DashboardStudent = () => {
             }
         };
         dispatch(startLoading);
-        fetchData();
+        fetchData().then(setIsLoading(student.isLoading));
     }, [startDate, endDate]);
 
     return (

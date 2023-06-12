@@ -30,18 +30,34 @@ const lineChartOptions = {
 
 // ==============================|| INCOME LINE CHART ||============================== //
 
+const monthMap = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
 const EmissionPrediction = ({ slot }) => {
     const theme = useTheme();
-
     const { primary, secondary } = theme.palette.text;
     const line = theme.palette.divider;
 
     const [options, setOptions] = useState(lineChartOptions);
+    const [series, setSeries] = useState([
+        {
+            name: 'IF',
+            data: [0, 86, 28, 115, 48, 210, 136]
+        },
+        {
+            name: 'STI',
+            data: [0, 43, 14, 56, 24, 105, 68]
+        },
+        {
+            name: 'MIF',
+            data: [0, 70, 33, 105, 28, 150, 106]
+        }
+    ]);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         setOptions((prevState) => ({
             ...prevState,
-            colors: [theme.palette.primary.main, theme.palette.primary[900]],
+            colors: [theme.palette.primary.main, theme.palette.primary[900], theme.palette.primary.light],
             xaxis: {
                 categories:
                     slot === 'month'
@@ -78,6 +94,7 @@ const EmissionPrediction = ({ slot }) => {
             },
             yaxis: {
                 labels: {
+                    formatter: (value) => `${value.toFixed(2)} kg CO2e`,
                     style: {
                         colors: [secondary]
                     }
@@ -92,17 +109,6 @@ const EmissionPrediction = ({ slot }) => {
         }));
     }, [primary, secondary, line, theme, slot]);
 
-    const [series, setSeries] = useState([
-        {
-            name: 'IF',
-            data: [0, 86, 28, 115, 48, 210, 136]
-        },
-        {
-            name: 'STI',
-            data: [0, 43, 14, 56, 24, 105, 68]
-        }
-    ]);
-
     useEffect(() => {
         setSeries([
             {
@@ -112,6 +118,10 @@ const EmissionPrediction = ({ slot }) => {
             {
                 name: 'STI',
                 data: slot === 'month' ? [110, 60, 150, 35, 60, 36, 26, 45, 65, 52, 53, 41] : [11, 32, 45, 32, 34, 52, 41]
+            },
+            {
+                name: 'MIF',
+                data: slot === 'month' ? [100, 50, 140, 25, 50, 26, 16, 35, 55, 42, 43, 31] : [0, 70, 33, 105, 28, 150, 106]
             }
         ]);
     }, [slot]);

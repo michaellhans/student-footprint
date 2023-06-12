@@ -6,7 +6,6 @@ import { useTheme } from '@mui/material/styles';
 
 // third-party
 import ReactApexChart from 'react-apexcharts';
-import { useSelector } from '../../../node_modules/react-redux/es/exports';
 
 // chart options
 const lineChartOptions = {
@@ -86,7 +85,7 @@ const EmissionPredictionSingle = ({ slot, history }) => {
     useEffect(() => {
         setOptions((prevState) => ({
             ...prevState,
-            colors: [theme.palette.primary.main, theme.palette.primary[900]],
+            colors: [theme.palette.primary.main, theme.palette.secondary.main],
             xaxis: {
                 categories: categories,
                 labels: {
