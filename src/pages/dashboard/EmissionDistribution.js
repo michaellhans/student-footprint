@@ -47,19 +47,26 @@ EmissionDistribution.propTypes = {
 function EmissionDistribution({ id }) {
     const student = useSelector((state) => state.student);
     let distribution = student.cf_activity;
-    console.log(student);
-    console.log(distribution);
-    console.log(Object.values(distribution));
-    console.log(Object.keys(distribution));
     if (id === 1) {
         distribution = student.cf_category;
     } else if (id === 2) {
         distribution = student.cf_in_out;
     }
 
-    const [series] = useState(Object.values(distribution) || []);
-    const [options] = useState(pieChartOptions(Object.keys(distribution) || []));
+    const [series, setSeries] = useState(Object.values(distribution) || []);
+    const [options, setOptions] = useState(pieChartOptions(Object.keys(distribution) || []));
     const [isLoading] = useState(false);
+
+    useEffect(() => {
+        console.log(student.cf_activity);
+        if (id === 1) {
+            distribution = student.cf_category;
+        } else if (id === 2) {
+            distribution = student.cf_in_out;
+        }
+        setSeries(Object.values(distribution));
+        setOptions(pieChartOptions(Object.keys(distribution)));
+    }, [student]);
 
     return isLoading ? (
         <StyledLoading>

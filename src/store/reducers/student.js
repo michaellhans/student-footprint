@@ -42,10 +42,10 @@ const student = createSlice({
 
         calculateSuccess(state, action) {
             state.isLoading = false;
-            state.cf_activity = action.payload.cf_activity;
-            state.cf_in_out = action.payload.cf_in_out;
-            state.cf_distribution = action.payload.cf_distribution;
-            state.cf_history = action.payload.cf_history;
+            state.cf_category = action.payload.details.cf_category;
+            state.cf_in_out = action.payload.details.cf_in_out;
+            state.cf_activity = action.payload.details.cf_activity;
+            state.cf_history = action.payload.details.cf_history;
         }
     }
 });

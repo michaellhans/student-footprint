@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 
 // material-ui
 import {
@@ -29,22 +29,53 @@ import HighlightProfile from 'components/cards/statistics/HighlightProfile';
 // assets
 import avatar2 from 'assets/images/users/avatar-2.png';
 import GreenAction from './GreenAction';
+import { useDispatch, useSelector } from '../../../node_modules/react-redux/es/exports';
+import { calculateSuccess, startLoading } from 'store/reducers/student';
+import { formattedDate } from 'utils/format';
+import dayjs from 'dayjs';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
+const url = 'http://127.0.0.1:5000/';
+
 const DashboardStudent = () => {
     const [slot, setSlot] = useState('week');
-    const [startDate, setStartDate] = useState();
-    const [endDate, setEndDate] = useState();
+    const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
+    const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
     const [timeframe, setTimeframe] = useState('Day');
 
+    const dispatch = useDispatch();
+
     const handleStartDateChange = (value) => {
-        setStartDate(value.toDate());
+        setStartDate(value);
     };
 
     const handleEndDateChange = (value) => {
-        setEndDate(value.toDate());
+        setEndDate(value);
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const params = new URLSearchParams({
+                NIM: 13520115,
+                start_date: startDate ? formattedDate(startDate) : '2023-01-17',
+                end_date: endDate ? formattedDate(endDate) : '2023-04-20'
+            });
+            try {
+                const response = await fetch(`${url}student?${params.toString()}`);
+                if (response.ok) {
+                    const res = await response.json();
+                    dispatch(calculateSuccess(res.data));
+                } else {
+                    console.error('Error: ', response.status);
+                }
+            } catch (error) {
+                console.error('Error: ', error);
+            }
+        };
+        dispatch(startLoading);
+        fetchData();
+    }, [startDate, endDate]);
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
