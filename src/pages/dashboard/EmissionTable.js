@@ -8,23 +8,8 @@ import { Tag } from 'antd';
 
 // third-party
 import NumberFormat from 'react-number-format';
-
-function createData(NIM, name, numCourses, level, emission) {
-    return { NIM, name, numCourses, level, emission };
-}
-
-const rows = [
-    createData(13518001, 'Chandrika Azharyanti', 22, 2, 40570),
-    createData(13518002, 'Aqil Abdul Aziz Syafiq', 24, 0, 180139),
-    createData(13518003, 'Dimas Lucky Mahendra', 15, 1, 90989),
-    createData(13518004, `Qurrata A'Yuni`, 18, 1, 10239),
-    createData(13518005, 'Arung Agamani Budi Putera', 16, 1, 83348),
-    createData(13518006, 'Ahadi Ihsan Rasyidin', 19, 0, 410780),
-    createData(13518007, 'Ade Surya Handika', 20, 2, 70999),
-    createData(13518008, 'Hasna Roihan Nafiisah', 21, 2, 10570),
-    createData(13518009, 'Aufa Fadhlurohman', 23, 1, 98063),
-    createData(13518010, 'Moh. Mirza Maulana Ikhsan', 20, 0, 14001)
-];
+import { useSelector } from '../../../node_modules/react-redux/es/exports';
+import { longFormattedDate } from 'utils/format';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -54,42 +39,22 @@ function stableSort(array, comparator) {
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
-const headCells = [
-    {
-        id: 'NIM',
-        align: 'left',
-        disablePadding: false,
-        label: 'NIM'
-    },
-    {
-        id: 'name',
-        align: 'left',
-        disablePadding: true,
-        label: 'Student Name'
-    },
-    {
-        id: 'numCourses',
-        align: 'left',
-        disablePadding: false,
-        label: 'Courses taken'
-    },
-    {
-        id: 'emission',
-        align: 'left',
-        disablePadding: false,
-        label: 'Total Emission'
-    },
-    {
-        id: 'level',
-        align: 'left',
-        disablePadding: false,
-        label: 'Emission Level'
-    }
-];
+function generateHeadCells(keys) {
+    let headCells = [];
+    keys.forEach(function (item) {
+        headCells.push({
+            id: item,
+            align: 'left',
+            disablePadding: false,
+            label: item
+        });
+    });
+    return headCells;
+}
 
 // ==============================|| ORDER TABLE - HEADER ||============================== //
 
-function EmissionTableHead({ order, orderBy }) {
+function EmissionTableHead({ headCells, order, orderBy }) {
     return (
         <TableHead>
             <TableRow>
@@ -109,6 +74,7 @@ function EmissionTableHead({ order, orderBy }) {
 }
 
 EmissionTableHead.propTypes = {
+    headCells: PropTypes.array,
     order: PropTypes.string,
     orderBy: PropTypes.string
 };
@@ -151,6 +117,10 @@ OrderStatus.propTypes = {
 // ==============================|| ORDER TABLE ||============================== //
 
 export default function EmissionTable() {
+    const student = useSelector((state) => state.student);
+    const rows = student.cf_history;
+    const dateKeys = ['Date', 'courses_emission', 'commuting_emission', , 'outclass_emission', 'total_emission'];
+
     const [order] = useState('asc');
     const [orderBy] = useState('NIM');
     const [selected] = useState([]);
@@ -180,7 +150,7 @@ export default function EmissionTable() {
                         }
                     }}
                 >
-                    <EmissionTableHead order={order} orderBy={orderBy} />
+                    <EmissionTableHead headCells={generateHeadCells(dateKeys)} order={order} orderBy={orderBy} />
                     <TableBody>
                         {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
                             const isItemSelected = isSelected(row.NIM);
@@ -198,17 +168,24 @@ export default function EmissionTable() {
                                 >
                                     <TableCell component="th" id={labelId} scope="row" align="left">
                                         <Link color="secondary" component={RouterLink} to="">
-                                            {row.NIM}
+                                            {longFormattedDate(row.date)}
                                         </Link>
                                     </TableCell>
-                                    <TableCell align="left">{row.name}</TableCell>
-                                    <TableCell align="left">{row.numCourses}</TableCell>
                                     <TableCell align="left">
-                                        <NumberFormat value={row.emission} displayType="text" thousandSeparator />
-                                        &nbsp;kg CO<sub>2</sub>
+                                        <NumberFormat value={row.courses_emission.toFixed(2)} displayType="text" thousandSeparator />
+                                        &nbsp;kg CO<sub>2</sub>e
                                     </TableCell>
-                                    <TableCell align="center">
-                                        <OrderStatus status={row.level} />
+                                    <TableCell align="left">
+                                        <NumberFormat value={row.commuting_emission.toFixed(2)} displayType="text" thousandSeparator />
+                                        &nbsp;kg CO<sub>2</sub>e
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        <NumberFormat value={row.outclass_emission.toFixed(2)} displayType="text" thousandSeparator />
+                                        &nbsp;kg CO<sub>2</sub>e
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        <NumberFormat value={row.total_emission.toFixed(2)} displayType="text" thousandSeparator />
+                                        &nbsp;kg CO<sub>2</sub>e
                                     </TableCell>
                                 </TableRow>
                             );

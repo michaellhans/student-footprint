@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 // third-party
 import ReactApexChart from 'react-apexcharts';
-import { EMISSION_ACTIVITY, EMISSION_CATEGORY, EMISSION_IN_OUT_CLASS } from 'api/mockData';
 import { styled } from '@mui/material/styles';
 import { CircularProgress } from '@mui/material';
 import { useSelector } from '../../../node_modules/react-redux/es/exports';

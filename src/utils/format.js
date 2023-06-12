@@ -6,3 +6,9 @@ export function formattedDate(dateString) {
 
     return formattedDate;
 }
+
+export function longFormattedDate(dateString) {
+    const date = new Date(dateString);
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}

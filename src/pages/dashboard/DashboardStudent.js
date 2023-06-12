@@ -21,7 +21,7 @@ import Select from '@mui/material/Select';
 import { DatePicker } from '@mui/x-date-pickers-pro';
 
 // project import
-import EmissionPrediction from './EmissionPrediction';
+import EmissionPredictionSingle from './EmissionPredictionSingle';
 import EmissionDistribution from './EmissionDistribution';
 import MainCard from 'components/MainCard';
 import HighlightProfile from 'components/cards/statistics/HighlightProfile';
@@ -43,6 +43,7 @@ const DashboardStudent = () => {
     const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
     const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
     const [timeframe, setTimeframe] = useState('Day');
+    const student_in_out = useSelector((state) => state.student.cf_in_out);
 
     const dispatch = useDispatch();
 
@@ -134,7 +135,14 @@ const DashboardStudent = () => {
                 </MainCard>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <HighlightProfile title="Carbon Footprint" count="18.80 kg CO2e" percentage={27.4} isLoss color="warning" extra="1,943" />
+                <HighlightProfile
+                    title="Carbon Footprint"
+                    count={`${(student_in_out['in_class'] + student_in_out['out_class']).toFixed(2)} kg CO2e`}
+                    percentage={27.4}
+                    isLoss
+                    color="warning"
+                    extra="1,943"
+                />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <HighlightProfile title="Distance to Campus" count="4.5 km" percentage={59.3} extra="35,000" />
@@ -197,7 +205,7 @@ const DashboardStudent = () => {
                 </Grid>
                 <MainCard content={false} sx={{ mt: 1.5 }}>
                     <Box sx={{ pt: 1, pr: 2 }}>
-                        <EmissionPrediction slot={slot} />
+                        <EmissionPredictionSingle slot={slot} />
                     </Box>
                 </MainCard>
             </Grid>
