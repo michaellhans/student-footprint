@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 
 // material-ui
 import {
@@ -21,7 +21,7 @@ import Select from '@mui/material/Select';
 import { DatePicker } from '@mui/x-date-pickers-pro';
 
 // project import
-import EmissionPrediction from './EmissionPrediction';
+import EmissionPredictionSingle from './EmissionPredictionSingle';
 import EmissionComparison from './EmissionComparison';
 import EmissionDistribution from './EmissionDistribution';
 import MainCard from 'components/MainCard';
@@ -30,23 +30,55 @@ import HighlightProfile from 'components/cards/statistics/HighlightProfile';
 // assets
 import avatar2 from 'assets/images/users/avatar-2.png';
 import GreenAction from './GreenAction';
+import dayjs from 'dayjs';
+import { useDispatch, useSelector } from '../../../node_modules/react-redux/es/exports';
+import { calculateSuccess, startLoading } from 'store/reducers/major';
+import { formattedDate } from 'utils/format';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
+const url = 'http://127.0.0.1:5000/major';
+
 const DashboardMajor = () => {
     const [slot, setSlot] = useState('week');
-    const [startDate, setStartDate] = useState();
-    const [endDate, setEndDate] = useState();
-    const [major, setMajor] = useState('');
+    const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
+    const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
     const [timeframe, setTimeframe] = useState('Day');
+    const [major, setMajor] = useState('IF');
+    const majorData = useSelector((state) => state.major);
+
+    const dispatch = useDispatch();
 
     const handleStartDateChange = (value) => {
-        setStartDate(value.toDate());
+        setStartDate(value);
     };
 
     const handleEndDateChange = (value) => {
-        setEndDate(value.toDate());
+        setEndDate(value);
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const params = new URLSearchParams({
+                major: major,
+                start_date: startDate ? formattedDate(startDate) : '2023-01-17',
+                end_date: endDate ? formattedDate(endDate) : '2023-04-20'
+            });
+            try {
+                const response = await fetch(`${url}?${params.toString()}`);
+                if (response.ok) {
+                    const res = await response.json();
+                    dispatch(calculateSuccess(res.data));
+                } else {
+                    console.error('Error: ', response.status);
+                }
+            } catch (error) {
+                console.error('Error: ', error);
+            }
+        };
+        dispatch(startLoading);
+        fetchData();
+    }, [major, startDate, endDate]);
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -99,7 +131,14 @@ const DashboardMajor = () => {
                 </MainCard>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <HighlightProfile title="Carbon Footprint" count="18.80 kg CO2e" percentage={27.4} isLoss color="warning" extra="1,943" />
+                <HighlightProfile
+                    title="Carbon Footprint"
+                    count={`${(majorData.cf_in_out['in_class'] + majorData.cf_in_out['out_class']).toFixed(2)} kg CO2e`}
+                    percentage={27.4}
+                    isLoss
+                    color="warning"
+                    extra="1,943"
+                />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <HighlightProfile title="Distance to Campus" count="4.5 km" percentage={59.3} extra="35,000" />
@@ -162,7 +201,7 @@ const DashboardMajor = () => {
                 </Grid>
                 <MainCard content={false} sx={{ mt: 1.5 }}>
                     <Box sx={{ pt: 1, pr: 2 }}>
-                        <EmissionPrediction slot={slot} />
+                        <EmissionPredictionSingle slot={slot} history={majorData.cf_history} />
                     </Box>
                 </MainCard>
             </Grid>
@@ -190,7 +229,7 @@ const DashboardMajor = () => {
                             <Typography>Commuting contribute the highest emission</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution id={1} />
+                    <EmissionDistribution distribution={majorData.cf_category} />
                 </MainCard>
             </Grid>
             <Grid item xs={12} md={5} lg={4}>
@@ -203,7 +242,7 @@ const DashboardMajor = () => {
                             <Typography>Out-class activity contribute the most on learning</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution id={2} />
+                    <EmissionDistribution distribution={majorData.cf_in_out} />
                 </MainCard>
             </Grid>
             <Grid item xs={12} md={5} lg={4}>
@@ -216,7 +255,7 @@ const DashboardMajor = () => {
                             <Typography>Coursework contribute the highest emission</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution id={3} />
+                    <EmissionDistribution distribution={majorData.cf_activity} />
                 </MainCard>
             </Grid>
 

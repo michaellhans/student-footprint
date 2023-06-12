@@ -33,10 +33,8 @@ const lineChartOptions = {
 
 const monthMap = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-const EmissionPredictionSingle = ({ slot }) => {
+const EmissionPredictionSingle = ({ slot, history }) => {
     const theme = useTheme();
-    const studentHistory = useSelector((state) => state.student.cf_history);
-
     const { primary, secondary } = theme.palette.text;
     const line = theme.palette.divider;
 
@@ -46,19 +44,19 @@ const EmissionPredictionSingle = ({ slot }) => {
 
     useEffect(() => {
         // Extract list of total emission
-        const totalEmissionList = studentHistory.map((item) => item.total_emission);
+        const totalEmissionList = history.map((item) => item.total_emission);
         console.log(totalEmissionList);
 
         // Extract list of dates
-        const dateList = studentHistory.map((item) => item.date);
+        const dateList = history.map((item) => item.date);
         console.log(dateList);
 
         let finalData, finalDate;
         if (slot == 'week') {
-            finalData = totalEmissionList.slice(0, 10);
-            finalDate = dateList.slice(0, 10);
+            finalData = totalEmissionList;
+            finalDate = dateList;
         } else {
-            const agg = studentHistory.reduce((result, item) => {
+            const agg = history.reduce((result, item) => {
                 const date = new Date(item.date);
                 const year = date.getFullYear();
                 const month = date.getMonth(); // Months are zero-based, so add 1
@@ -83,7 +81,7 @@ const EmissionPredictionSingle = ({ slot }) => {
             }
         ]);
         setCategories(finalDate);
-    }, [studentHistory, slot]);
+    }, [history, slot]);
 
     useEffect(() => {
         setOptions((prevState) => ({
@@ -141,7 +139,8 @@ const EmissionPredictionSingle = ({ slot }) => {
 };
 
 EmissionPredictionSingle.propTypes = {
-    slot: PropTypes.string
+    slot: PropTypes.string,
+    history: PropTypes.object
 };
 
 export default EmissionPredictionSingle;

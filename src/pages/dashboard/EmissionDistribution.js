@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import ReactApexChart from 'react-apexcharts';
 import { styled } from '@mui/material/styles';
 import { CircularProgress } from '@mui/material';
-import { useSelector } from '../../../node_modules/react-redux/es/exports';
 
 // chart options
 function pieChartOptions(labels) {
@@ -27,7 +26,17 @@ function pieChartOptions(labels) {
                     }
                 }
             }
-        ]
+        ],
+        tooltip: {
+            y: {
+                formatter: function (value) {
+                    return value.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                }
+            }
+        }
     };
 }
 
@@ -40,32 +49,18 @@ const StyledLoading = styled('div')(() => ({
 }));
 
 EmissionDistribution.propTypes = {
-    id: PropTypes.number
+    distribution: PropTypes.object
 };
 
-function EmissionDistribution({ id }) {
-    const student = useSelector((state) => state.student);
-    let distribution = student.cf_activity;
-    if (id === 1) {
-        distribution = student.cf_category;
-    } else if (id === 2) {
-        distribution = student.cf_in_out;
-    }
-
-    const [series, setSeries] = useState(Object.values(distribution) || []);
-    const [options, setOptions] = useState(pieChartOptions(Object.keys(distribution) || []));
+function EmissionDistribution({ distribution }) {
+    const [series, setSeries] = useState([]);
+    const [options, setOptions] = useState(pieChartOptions([]));
     const [isLoading] = useState(false);
 
     useEffect(() => {
-        console.log(student.cf_activity);
-        if (id === 1) {
-            distribution = student.cf_category;
-        } else if (id === 2) {
-            distribution = student.cf_in_out;
-        }
         setSeries(Object.values(distribution));
         setOptions(pieChartOptions(Object.keys(distribution)));
-    }, [student]);
+    }, [distribution]);
 
     return isLoading ? (
         <StyledLoading>

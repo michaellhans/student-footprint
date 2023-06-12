@@ -36,14 +36,14 @@ import dayjs from 'dayjs';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
-const url = 'http://127.0.0.1:5000/';
+const url = 'http://127.0.0.1:5000/student';
 
 const DashboardStudent = () => {
     const [slot, setSlot] = useState('week');
     const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
     const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
     const [timeframe, setTimeframe] = useState('Day');
-    const student_in_out = useSelector((state) => state.student.cf_in_out);
+    const student = useSelector((state) => state.student);
 
     const dispatch = useDispatch();
 
@@ -63,7 +63,7 @@ const DashboardStudent = () => {
                 end_date: endDate ? formattedDate(endDate) : '2023-04-20'
             });
             try {
-                const response = await fetch(`${url}student?${params.toString()}`);
+                const response = await fetch(`${url}?${params.toString()}`);
                 if (response.ok) {
                     const res = await response.json();
                     dispatch(calculateSuccess(res.data));
@@ -137,7 +137,7 @@ const DashboardStudent = () => {
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <HighlightProfile
                     title="Carbon Footprint"
-                    count={`${(student_in_out['in_class'] + student_in_out['out_class']).toFixed(2)} kg CO2e`}
+                    count={`${(student.cf_in_out['in_class'] + student.cf_in_out['out_class']).toFixed(2)} kg CO2e`}
                     percentage={27.4}
                     isLoss
                     color="warning"
@@ -205,7 +205,7 @@ const DashboardStudent = () => {
                 </Grid>
                 <MainCard content={false} sx={{ mt: 1.5 }}>
                     <Box sx={{ pt: 1, pr: 2 }}>
-                        <EmissionPredictionSingle slot={slot} />
+                        <EmissionPredictionSingle slot={slot} history={student.cf_history} />
                     </Box>
                 </MainCard>
             </Grid>
@@ -233,7 +233,7 @@ const DashboardStudent = () => {
                             <Typography>Commuting contribute the highest emission</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution id={1} />
+                    <EmissionDistribution distribution={student.cf_category} />
                 </MainCard>
             </Grid>
             <Grid item xs={12} md={5} lg={4}>
@@ -246,7 +246,7 @@ const DashboardStudent = () => {
                             <Typography>Out-class activity contribute the most on learning</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution id={2} />
+                    <EmissionDistribution distribution={student.cf_in_out} />
                 </MainCard>
             </Grid>
             <Grid item xs={12} md={5} lg={4}>
@@ -259,7 +259,7 @@ const DashboardStudent = () => {
                             <Typography>Coursework contribute the highest emission</Typography>
                         </Stack>
                     </Box>
-                    <EmissionDistribution id={3} />
+                    <EmissionDistribution distribution={student.cf_activity} />
                 </MainCard>
             </Grid>
         </Grid>
