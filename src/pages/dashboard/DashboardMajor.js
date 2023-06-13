@@ -78,7 +78,7 @@ const DashboardMajor = () => {
         };
         dispatch(startLoading);
         fetchData();
-    }, [major, startDate, endDate]);
+    }, [dispatch, major, startDate, endDate]);
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>

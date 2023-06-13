@@ -94,7 +94,7 @@ const exam = {
 
 EmissionComparison.propTypes = {
     isExam: PropTypes.bool,
-    coursesEmission: PropTypes.object
+    coursesEmission: PropTypes.array
 };
 
 function EmissionComparison({ isExam, coursesEmission }) {
@@ -103,7 +103,6 @@ function EmissionComparison({ isExam, coursesEmission }) {
     const info = theme.palette.info.light;
 
     const [options, setOptions] = useState(barChartOptions);
-    console.log(barChartOptions.colors);
     const [series, setSeries] = useState([
         {
             data: [80, 95, 70, 78, 65, 55, 42]
@@ -126,8 +125,8 @@ function EmissionComparison({ isExam, coursesEmission }) {
         };
         const classElectronic = coursesEmission.map((item) => colorMapping[item.class_electronic]);
 
-        setSeries([{ data: totalEmissionList }]);
-        setCategories(courseList);
+        setSeries([{ data: totalEmissionList.slice(0, 10) }]);
+        setCategories(courseList.slice(0, 10));
         setColors(classElectronic);
     }, [coursesEmission, isExam]);
 

@@ -43,12 +43,11 @@ const EmissionPredictionSingle = ({ slot, history }) => {
 
     useEffect(() => {
         // Extract list of total emission
+        console.log(history);
         const totalEmissionList = history.map((item) => item.total_emission);
-        console.log(totalEmissionList);
 
         // Extract list of dates
         const dateList = history.map((item) => item.date);
-        console.log(dateList);
 
         let finalData, finalDate;
         if (slot == 'week') {
@@ -139,7 +138,7 @@ const EmissionPredictionSingle = ({ slot, history }) => {
 
 EmissionPredictionSingle.propTypes = {
     slot: PropTypes.string,
-    history: PropTypes.object
+    history: PropTypes.array
 };
 
 export default EmissionPredictionSingle;

@@ -32,8 +32,8 @@ import avatar2 from 'assets/images/users/avatar-2.png';
 import GreenAction from './GreenAction';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from '../../../node_modules/react-redux/es/exports';
-import { formattedDate } from 'utils/format';
 import { calculateSuccess, startLoading } from 'store/reducers/itb';
+import { formattedDate } from 'utils/format';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
@@ -76,7 +76,7 @@ const DashboardOverall = () => {
         };
         dispatch(startLoading);
         fetchData();
-    }, [startDate, endDate]);
+    }, [dispatch, startDate, endDate]);
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -279,7 +279,7 @@ const DashboardOverall = () => {
                             <Typography variant="h3">50.4 kg CO2e produced from Electricity</Typography>
                         </Stack>
                     </Box>
-                    <EmissionComparison isExam={false} />
+                    <EmissionComparison isExam={false} coursesEmission={itb.cf_course_distribution} />
                 </MainCard>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -298,7 +298,7 @@ const DashboardOverall = () => {
                             <Typography variant="h3">Paper-based is 30% greener</Typography>
                         </Stack>
                     </Box>
-                    <EmissionComparison isExam={true} />
+                    <EmissionComparison isExam={true} coursesEmission={itb.cf_course_distribution} />
                 </MainCard>
             </Grid>
         </Grid>
