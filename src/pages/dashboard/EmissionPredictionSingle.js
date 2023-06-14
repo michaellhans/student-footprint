@@ -21,7 +21,8 @@ const lineChartOptions = {
     },
     stroke: {
         curve: 'smooth',
-        width: 2
+        width: 2,
+        dashArray: [0, 4]
     },
     grid: {
         strokeDashArray: 0
@@ -43,18 +44,22 @@ const EmissionPredictionSingle = ({ slot, history }) => {
 
     useEffect(() => {
         // Extract list of total emission
-        console.log(history);
         const totalEmissionList = history.map((item) => item.total_emission);
+
+        let finalPredicted;
+        if (history.length > 0 && history[0].predicted_emission) {
+            finalPredicted = history.map((item) => item.predicted_emission);
+        }
 
         // Extract list of dates
         const dateList = history.map((item) => item.date);
 
         let finalData, finalDate;
-        if (slot == 'week') {
+        if (slot == 'day') {
             finalData = totalEmissionList;
             finalDate = dateList;
         } else {
-            const agg = history.reduce((result, item) => {
+            let agg = history.reduce((result, item) => {
                 const date = new Date(item.date);
                 const year = date.getFullYear();
                 const month = date.getMonth(); // Months are zero-based, so add 1
@@ -67,24 +72,54 @@ const EmissionPredictionSingle = ({ slot, history }) => {
                 console.log(result);
                 return result;
             }, {});
-            console.log(agg);
             finalData = Object.values(agg);
             finalDate = Object.keys(agg);
+            if (history.length > 0 && history[0].predicted_emission) {
+                agg = history.reduce((result, item) => {
+                    const date = new Date(item.date);
+                    const year = date.getFullYear();
+                    const month = date.getMonth(); // Months are zero-based, so add 1
+
+                    const key = `${monthMap[month]} ${year}`;
+                    if (!result[key]) {
+                        result[key] = 0;
+                    }
+                    result[key] += item.predicted_emission;
+                    console.log(result);
+                    return result;
+                }, {});
+                finalPredicted = Object.values(agg);
+            }
         }
 
-        setSeries([
-            {
-                name: 'Carbon Emission',
-                data: finalData
-            }
-        ]);
+        if (finalPredicted) {
+            setSeries([
+                {
+                    name: 'Real Emission',
+                    data: finalData
+                },
+                {
+                    name: 'Predicted Emission',
+                    data: finalPredicted,
+                    dashArray: 4
+                }
+            ]);
+        } else {
+            setSeries([
+                {
+                    name: 'Real Emission',
+                    data: finalData
+                }
+            ]);
+        }
+
         setCategories(finalDate);
     }, [history, slot]);
 
     useEffect(() => {
         setOptions((prevState) => ({
             ...prevState,
-            colors: [theme.palette.primary.main, theme.palette.secondary.main],
+            colors: [theme.palette.primary.main, theme.palette.error.main],
             xaxis: {
                 categories: categories,
                 labels: {

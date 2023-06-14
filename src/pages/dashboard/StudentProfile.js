@@ -12,7 +12,6 @@ import {
     FormControlLabel,
     RadioGroup,
     Radio,
-    Divider,
     Stack
 } from '@mui/material';
 

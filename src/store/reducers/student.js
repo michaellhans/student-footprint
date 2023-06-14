@@ -23,7 +23,7 @@ const initialState = {
         out_class: 0
     },
     cf_history: [],
-    profile: null
+    cf_profile: null
 };
 
 // ==============================|| SLICE - STUDENT ||============================== //
@@ -47,6 +47,7 @@ const student = createSlice({
             state.cf_in_out = action.payload.details.cf_in_out;
             state.cf_activity = action.payload.details.cf_activity;
             state.cf_history = action.payload.details.cf_history;
+            state.cf_profile = action.payload.details.cf_profile;
         }
     }
 });

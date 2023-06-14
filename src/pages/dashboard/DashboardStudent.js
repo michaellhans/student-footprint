@@ -12,8 +12,10 @@ import {
     ListItemAvatar,
     ListItemText,
     MenuItem,
+    TextField,
     Stack,
-    Typography
+    Typography,
+    Autocomplete
 } from '@mui/material';
 
 import Select from '@mui/material/Select';
@@ -27,6 +29,7 @@ import MainCard from 'components/MainCard';
 import HighlightProfile from 'components/cards/statistics/HighlightProfile';
 
 // assets
+import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
 import GreenAction from './GreenAction';
 import { useDispatch, useSelector } from '../../../node_modules/react-redux/es/exports';
@@ -38,15 +41,18 @@ import StudentProfile from './StudentProfile';
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const url = 'http://127.0.0.1:5000/student';
+const NIM_list = ['23522011', '13520115', '13519020'];
 
 const DashboardStudent = () => {
-    const [slot, setSlot] = useState('week');
+    const [slot, setSlot] = useState('day');
     const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
     const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
-    const [timeframe, setTimeframe] = useState('Day');
+    const [NIM, setNIM] = useState('23522011');
     const student = useSelector((state) => state.student);
-    const stdProfile = student.profile;
+    const stdProfile = student.cf_profile;
     const [isProfilePage, setIsProfilePage] = useState(stdProfile == null);
+    const avatar = stdProfile && stdProfile.gender == 'Female' ? avatar1 : avatar2;
+    // Change it into == null again later
 
     const dispatch = useDispatch();
 
@@ -58,6 +64,10 @@ const DashboardStudent = () => {
         setEndDate(value);
     };
 
+    const handleNIMChange = (event, newValue) => {
+        setNIM(newValue);
+    };
+
     useEffect(() => {
         setIsProfilePage(stdProfile == null);
     }, [stdProfile]);
@@ -65,7 +75,7 @@ const DashboardStudent = () => {
     useEffect(() => {
         const fetchData = async () => {
             const params = new URLSearchParams({
-                NIM: 13520115,
+                NIM: NIM,
                 start_date: startDate ? formattedDate(startDate) : '2023-01-17',
                 end_date: endDate ? formattedDate(endDate) : '2023-04-20'
             });
@@ -83,7 +93,7 @@ const DashboardStudent = () => {
         };
         dispatch(startLoading);
         fetchData();
-    }, [startDate, endDate]);
+    }, [NIM, startDate, endDate]);
 
     return isProfilePage ? (
         <StudentProfile />
@@ -99,16 +109,17 @@ const DashboardStudent = () => {
                         <Grid item xs={12} lg={4}>
                             <ListItem alignItems="flex-start">
                                 <ListItemAvatar>
-                                    <Avatar alt="profile user" src={avatar2} />
+                                    <Avatar alt="profile user" src={avatar} />
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primary="Michael Hans"
+                                    primary={stdProfile && stdProfile.name}
                                     secondary={
                                         <Fragment>
                                             <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
-                                                23522011
+                                                {stdProfile && stdProfile.NIM}
                                             </Typography>
-                                            {' / Master of Informatics '}
+                                            {' / '}
+                                            {stdProfile && stdProfile.major}
                                         </Fragment>
                                     }
                                 />
@@ -116,16 +127,24 @@ const DashboardStudent = () => {
                         </Grid>
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
                             <Stack spacing={0.5}>
-                                <Typography>Timeframe</Typography>
-                                <FormControl>
-                                    <Select value={timeframe} onChange={(event) => setTimeframe(event.target.value)} label="Timeframe">
+                                <Typography>NIM</Typography>
+                                {/* <FormControl>
+                                    <Select value={NIM} onChange={(event) => setNIM(event.target.value)} label="NIM">
                                         <MenuItem value={'Day'}>Day</MenuItem>
                                         <MenuItem value={'Week'}>Week</MenuItem>
                                         <MenuItem value={'Month'}>Month</MenuItem>
                                         <MenuItem value={'Semester'}>Semester</MenuItem>
                                         <MenuItem value={'Year'}>Year</MenuItem>
                                     </Select>
-                                </FormControl>
+                                </FormControl> */}
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={NIM_list}
+                                    value={NIM}
+                                    onChange={handleNIMChange}
+                                    renderInput={(params) => <TextField {...params} variant="outlined" size="small" />}
+                                />
                             </Stack>
                         </Grid>
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
@@ -154,10 +173,22 @@ const DashboardStudent = () => {
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <HighlightProfile title="Distance to Campus" count="4.5 km" percentage={59.3} extra="35,000" />
+                <HighlightProfile
+                    title="Distance to Campus"
+                    count={(stdProfile && stdProfile.distance) + ' km'}
+                    percentage={59.3}
+                    extra="35,000"
+                />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <HighlightProfile title="Laptop usage" count="8.5 hours" percentage={27.4} isLoss color="warning" extra="1,943" />
+                <HighlightProfile
+                    title="Laptop usage"
+                    count={stdProfile && stdProfile.day_laptop_total + ' hours'}
+                    percentage={27.4}
+                    isLoss
+                    color="warning"
+                    extra="1,943"
+                />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <MainCard contentSX={{ p: 2.25 }}>
@@ -167,21 +198,52 @@ const DashboardStudent = () => {
                         </Typography>
                         <List sx={{ p: 0 }}>
                             <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Vehicle used" />
-                                <Typography>Motorcycle</Typography>
+                                <ListItemText primary="Transportation" />
+                                <Typography>{stdProfile && stdProfile.mode_transportation}</Typography>
                             </ListItem>
                             <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Fuel used" />
-                                <Typography>Pertamax</Typography>
+                                <ListItemText primary="Residence" />
+                                <Typography>{stdProfile && stdProfile.residence}</Typography>
                             </ListItem>
                             <ListItem sx={{ p: 0 }}>
                                 <ListItemText primary="Travel time" />
-                                <Typography>45 minutes</Typography>
+                                <Typography>{stdProfile && stdProfile.travel_time} minutes</Typography>
                             </ListItem>
                         </List>
                     </Stack>
                 </MainCard>
             </Grid>
+            {/* <Grid item xs={12} sm={6} md={4} lg={3}>
+                <MainCard contentSX={{ p: 2.25 }}>
+                    <Stack spacing={0.5}>
+                        <Typography variant="h6" color="textSecondary">
+                            Learning Behavior
+                        </Typography>
+                        <List sx={{ p: 0 }}>
+                            <ListItem sx={{ p: 0 }}>
+                                <ListItemText primary="Use laptop on class" />
+                                <Typography>{stdProfile && stdProfile.use_laptop_on_class ? 'Yes' : 'No'}</Typography>
+                            </ListItem>
+                            <ListItem sx={{ p: 0 }}>
+                                <ListItemText primary="Daily laptop usage" />
+                                <Typography>{stdProfile && stdProfile.day_laptop_total} hours</Typography>
+                            </ListItem>
+                            <ListItem sx={{ p: 0 }}>
+                                <ListItemText primary="Laptop usage for coursework" />
+                                <Typography>{stdProfile && stdProfile.day_laptop_outclass} hours</Typography>
+                            </ListItem>
+                            <ListItem sx={{ p: 0 }}>
+                                <ListItemText primary="Daily Smartphone usage" />
+                                <Typography>{stdProfile && stdProfile.day_phone_total} hours</Typography>
+                            </ListItem>
+                            <ListItem sx={{ p: 0 }}>
+                                <ListItemText primary="Paper consumption per lecture" />
+                                <Typography>{stdProfile && stdProfile.paper_consumption} sheets</Typography>
+                            </ListItem>
+                        </List>
+                    </Stack>
+                </MainCard>
+            </Grid> */}
 
             <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 
@@ -203,11 +265,11 @@ const DashboardStudent = () => {
                             </Button>
                             <Button
                                 size="small"
-                                onClick={() => setSlot('week')}
-                                color={slot === 'week' ? 'primary' : 'secondary'}
-                                variant={slot === 'week' ? 'outlined' : 'text'}
+                                onClick={() => setSlot('day')}
+                                color={slot === 'day' ? 'primary' : 'secondary'}
+                                variant={slot === 'day' ? 'outlined' : 'text'}
                             >
-                                Week
+                                Day
                             </Button>
                         </Stack>
                     </Grid>

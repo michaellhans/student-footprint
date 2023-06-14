@@ -69,6 +69,15 @@ const DataView = () => {
                     <Button
                         size="medium"
                         style={{ width: 200, borderBottom: '1px solid' }}
+                        onClick={() => setLevel('student')}
+                        color={level === 'student' ? 'primary' : 'secondary'}
+                        variant={level === 'student' ? 'outlined' : 'text'}
+                    >
+                        Student
+                    </Button>
+                    <Button
+                        size="medium"
+                        style={{ width: 200, borderBottom: '1px solid' }}
                         onClick={() => setLevel('major')}
                         color={level === 'major' ? 'primary' : 'secondary'}
                         variant={level === 'major' ? 'outlined' : 'text'}
@@ -82,16 +91,7 @@ const DataView = () => {
                         color={level === 'course' ? 'primary' : 'secondary'}
                         variant={level === 'course' ? 'outlined' : 'text'}
                     >
-                        Course
-                    </Button>
-                    <Button
-                        size="medium"
-                        style={{ width: 200, borderBottom: '1px solid' }}
-                        onClick={() => setLevel('student')}
-                        color={level === 'student' ? 'primary' : 'secondary'}
-                        variant={level === 'student' ? 'outlined' : 'text'}
-                    >
-                        Student
+                        Summary
                     </Button>
                 </Stack>
             </Grid>
