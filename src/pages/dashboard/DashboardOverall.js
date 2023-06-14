@@ -274,7 +274,7 @@ const DashboardOverall = () => {
                     <Box sx={{ p: 3, pb: 0 }}>
                         <Stack spacing={2}>
                             <Typography variant="h6" color="textSecondary">
-                                May Period Statistics
+                                Period {startDate.format('YYYY-MM-DD')} until {endDate.format('YYYY-MM-DD')} statistics
                             </Typography>
                             <Typography variant="h3">50.4 kg CO2e produced from Electricity</Typography>
                         </Stack>
@@ -293,7 +293,7 @@ const DashboardOverall = () => {
                     <Box sx={{ p: 3, pb: 0 }}>
                         <Stack spacing={2}>
                             <Typography variant="h6" color="textSecondary">
-                                May Period Statistics
+                                Period {startDate.format('YYYY-MM-DD')} until {endDate.format('YYYY-MM-DD')} statistics
                             </Typography>
                             <Typography variant="h3">Paper-based is 30% greener</Typography>
                         </Stack>

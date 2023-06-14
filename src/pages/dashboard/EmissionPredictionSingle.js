@@ -69,7 +69,6 @@ const EmissionPredictionSingle = ({ slot, history }) => {
                     result[key] = 0;
                 }
                 result[key] += item.total_emission;
-                console.log(result);
                 return result;
             }, {});
             finalData = Object.values(agg);
@@ -85,7 +84,6 @@ const EmissionPredictionSingle = ({ slot, history }) => {
                         result[key] = 0;
                     }
                     result[key] += item.predicted_emission;
-                    console.log(result);
                     return result;
                 }, {});
                 finalPredicted = Object.values(agg);
