@@ -8,8 +8,7 @@ import { Tag } from 'antd';
 
 // third-party
 import NumberFormat from 'react-number-format';
-import { useSelector } from '../../../node_modules/react-redux/es/exports';
-import { longFormattedDate } from 'utils/format';
+import { formattedDate, longFormattedDate } from 'utils/format';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -41,10 +40,10 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'date',
+        id: 'nim',
         align: 'left',
         disablePadding: false,
-        label: 'Date'
+        label: 'NIM'
     },
     {
         id: 'courses',
@@ -74,7 +73,7 @@ const headCells = [
 
 // ==============================|| ORDER TABLE - HEADER ||============================== //
 
-function EmissionTableHead({ headCells, order, orderBy }) {
+function EmissionTableStudentHead({ headCells, order, orderBy }) {
     return (
         <TableHead>
             <TableRow>
@@ -93,7 +92,7 @@ function EmissionTableHead({ headCells, order, orderBy }) {
     );
 }
 
-EmissionTableHead.propTypes = {
+EmissionTableStudentHead.propTypes = {
     headCells: PropTypes.array,
     order: PropTypes.string,
     orderBy: PropTypes.string
@@ -136,26 +135,47 @@ OrderStatus.propTypes = {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function EmissionTable() {
-    const student = useSelector((state) => state.student);
-    const [rows, setRows] = useState(student.cf_history);
-    const [isLoading, setIsLoading] = useState(true);
+const url = 'http://127.0.0.1:5000/summary';
+
+EmissionTableStudent.propTypes = {
+    startDate: PropTypes.object,
+    endDate: PropTypes.object
+};
+
+export default function EmissionTableStudent({ startDate, endDate }) {
+    const [rows, setRows] = useState([]);
 
     const [order] = useState('asc');
-    const [orderBy] = useState('Date');
+    const [orderBy] = useState('total');
     const [selected] = useState([]);
 
     useEffect(() => {
-        setRows(student.cf_history);
-        if (rows.length > 0) {
-            setIsLoading(false);
-        }
-    }, [student]);
+        const fetchData = async () => {
+            const params = new URLSearchParams({
+                level: 'student',
+                start_date: startDate && formattedDate(startDate),
+                end_date: endDate && formattedDate(endDate)
+            });
+            try {
+                const response = await fetch(`${url}?${params.toString()}`);
+                if (response.ok) {
+                    const res = await response.json();
+                    console.log(res.data);
+                    setRows(res.data);
+                } else {
+                    console.error('Error: ', response.status);
+                }
+            } catch (error) {
+                console.error('Error: ', error);
+            }
+        };
+        fetchData();
+    }, [startDate, endDate]);
 
     const isSelected = (NIM) => selected.indexOf(NIM) !== -1;
 
     return (
-        !isLoading && (
+        rows.length > 0 && (
             <Box>
                 <TableContainer
                     sx={{
@@ -178,7 +198,7 @@ export default function EmissionTable() {
                             }
                         }}
                     >
-                        <EmissionTableHead headCells={headCells} order={order} orderBy={orderBy} />
+                        <EmissionTableStudentHead headCells={headCells} order={order} orderBy={orderBy} />
                         <TableBody>
                             {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
                                 const isItemSelected = isSelected(row.NIM);
@@ -191,12 +211,12 @@ export default function EmissionTable() {
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
-                                        key={row.date}
+                                        key={row.NIM}
                                         selected={isItemSelected}
                                     >
                                         <TableCell component="th" id={labelId} scope="row" align="left">
                                             <Link color="secondary" component={RouterLink} to="">
-                                                {longFormattedDate(row.date)}
+                                                {row.NIM}
                                             </Link>
                                         </TableCell>
                                         <TableCell align="left">

@@ -15,12 +15,15 @@ import MainCard from 'components/MainCard';
 import avatar2 from 'assets/images/users/avatar-2.png';
 import { formattedDate } from 'utils/format';
 import dayjs from 'dayjs';
+import EmissionTableMajor from './EmissionTableMajor';
+import EmissionTableStudent from './EmissionTableStudent';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
+
 const url = 'http://127.0.0.1:5000/';
 
 const DataView = () => {
-    const [level, setLevel] = useState('student');
+    const [level, setLevel] = useState('history');
     const [slot, setSlot] = useState(level);
     const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
     const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
@@ -69,11 +72,11 @@ const DataView = () => {
                     <Button
                         size="medium"
                         style={{ width: 200, borderBottom: '1px solid' }}
-                        onClick={() => setLevel('student')}
-                        color={level === 'student' ? 'primary' : 'secondary'}
-                        variant={level === 'student' ? 'outlined' : 'text'}
+                        onClick={() => setLevel('history')}
+                        color={level === 'history' ? 'primary' : 'secondary'}
+                        variant={level === 'history' ? 'outlined' : 'text'}
                     >
-                        Student
+                        History
                     </Button>
                     <Button
                         size="medium"
@@ -87,11 +90,11 @@ const DataView = () => {
                     <Button
                         size="medium"
                         style={{ width: 200, borderBottom: '1px solid' }}
-                        onClick={() => setLevel('course')}
-                        color={level === 'course' ? 'primary' : 'secondary'}
-                        variant={level === 'course' ? 'outlined' : 'text'}
+                        onClick={() => setLevel('student')}
+                        color={level === 'student' ? 'primary' : 'secondary'}
+                        variant={level === 'student' ? 'outlined' : 'text'}
                     >
-                        Summary
+                        Student
                     </Button>
                 </Stack>
             </Grid>
@@ -177,7 +180,9 @@ const DataView = () => {
                     </Grid>
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
-                    <EmissionTable />
+                    {level == 'history' && <EmissionTable />}
+                    {level == 'major' && <EmissionTableMajor startDate={startDate} endDate={endDate} />}
+                    {level == 'student' && <EmissionTableStudent startDate={startDate} endDate={endDate} />}
                 </MainCard>
             </Grid>
         </Grid>

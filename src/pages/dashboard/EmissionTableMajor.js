@@ -9,7 +9,7 @@ import { Tag } from 'antd';
 // third-party
 import NumberFormat from 'react-number-format';
 import { useSelector } from '../../../node_modules/react-redux/es/exports';
-import { longFormattedDate } from 'utils/format';
+import { formattedDate, longFormattedDate } from 'utils/format';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -47,22 +47,22 @@ const headCells = [
         label: 'Date'
     },
     {
-        id: 'courses',
+        id: 'if',
         align: 'left',
         disablePadding: true,
-        label: 'Courses'
+        label: 'IF'
     },
     {
-        id: 'commuting',
+        id: 'sti',
         align: 'left',
         disablePadding: false,
-        label: 'Commuting'
+        label: 'STI'
     },
     {
-        id: 'outclass',
+        id: 'mif',
         align: 'left',
         disablePadding: false,
-        label: 'Outclass'
+        label: 'MIF'
     },
     {
         id: 'total',
@@ -74,7 +74,7 @@ const headCells = [
 
 // ==============================|| ORDER TABLE - HEADER ||============================== //
 
-function EmissionTableHead({ headCells, order, orderBy }) {
+function EmissionTableMajorHead({ headCells, order, orderBy }) {
     return (
         <TableHead>
             <TableRow>
@@ -93,7 +93,7 @@ function EmissionTableHead({ headCells, order, orderBy }) {
     );
 }
 
-EmissionTableHead.propTypes = {
+EmissionTableMajorHead.propTypes = {
     headCells: PropTypes.array,
     order: PropTypes.string,
     orderBy: PropTypes.string
@@ -136,26 +136,47 @@ OrderStatus.propTypes = {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function EmissionTable() {
-    const student = useSelector((state) => state.student);
-    const [rows, setRows] = useState(student.cf_history);
-    const [isLoading, setIsLoading] = useState(true);
+const url = 'http://127.0.0.1:5000/summary';
+
+EmissionTableMajor.propTypes = {
+    startDate: PropTypes.object,
+    endDate: PropTypes.object
+};
+
+export default function EmissionTableMajor({ startDate, endDate }) {
+    const [rows, setRows] = useState([]);
 
     const [order] = useState('asc');
     const [orderBy] = useState('Date');
     const [selected] = useState([]);
 
     useEffect(() => {
-        setRows(student.cf_history);
-        if (rows.length > 0) {
-            setIsLoading(false);
-        }
-    }, [student]);
+        const fetchData = async () => {
+            const params = new URLSearchParams({
+                level: 'major',
+                start_date: startDate && formattedDate(startDate),
+                end_date: endDate && formattedDate(endDate)
+            });
+            try {
+                const response = await fetch(`${url}?${params.toString()}`);
+                if (response.ok) {
+                    const res = await response.json();
+                    console.log(res.data);
+                    setRows(res.data);
+                } else {
+                    console.error('Error: ', response.status);
+                }
+            } catch (error) {
+                console.error('Error: ', error);
+            }
+        };
+        fetchData();
+    }, [startDate, endDate]);
 
     const isSelected = (NIM) => selected.indexOf(NIM) !== -1;
 
     return (
-        !isLoading && (
+        rows.length > 0 && (
             <Box>
                 <TableContainer
                     sx={{
@@ -178,7 +199,7 @@ export default function EmissionTable() {
                             }
                         }}
                     >
-                        <EmissionTableHead headCells={headCells} order={order} orderBy={orderBy} />
+                        <EmissionTableMajorHead headCells={headCells} order={order} orderBy={orderBy} />
                         <TableBody>
                             {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
                                 const isItemSelected = isSelected(row.NIM);
@@ -200,15 +221,15 @@ export default function EmissionTable() {
                                             </Link>
                                         </TableCell>
                                         <TableCell align="left">
-                                            <NumberFormat value={row.courses_emission.toFixed(2)} displayType="text" thousandSeparator />
+                                            <NumberFormat value={row.IF.toFixed(2)} displayType="text" thousandSeparator />
                                             &nbsp;kg CO<sub>2</sub>e
                                         </TableCell>
                                         <TableCell align="left">
-                                            <NumberFormat value={row.commuting_emission.toFixed(2)} displayType="text" thousandSeparator />
+                                            <NumberFormat value={row.STI.toFixed(2)} displayType="text" thousandSeparator />
                                             &nbsp;kg CO<sub>2</sub>e
                                         </TableCell>
                                         <TableCell align="left">
-                                            <NumberFormat value={row.outclass_emission.toFixed(2)} displayType="text" thousandSeparator />
+                                            <NumberFormat value={row.MIF.toFixed(2)} displayType="text" thousandSeparator />
                                             &nbsp;kg CO<sub>2</sub>e
                                         </TableCell>
                                         <TableCell align="left">
