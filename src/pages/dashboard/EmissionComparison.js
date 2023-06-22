@@ -32,6 +32,7 @@ const barChartOptions = {
     chart: {
         type: 'bar',
         height: 365,
+        width: 600,
         toolbar: {
             show: false
         }

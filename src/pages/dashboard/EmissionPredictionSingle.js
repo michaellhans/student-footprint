@@ -155,7 +155,8 @@ const EmissionPredictionSingle = ({ slot, history }) => {
                     style: {
                         colors: [secondary]
                     }
-                }
+                },
+                min: 0
             },
             grid: {
                 borderColor: line

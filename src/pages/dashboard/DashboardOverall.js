@@ -34,17 +34,27 @@ import dayjs from 'dayjs';
 import { useDispatch, useSelector } from '../../../node_modules/react-redux/es/exports';
 import { calculateSuccess, startLoading } from 'store/reducers/itb';
 import { formattedDate } from 'utils/format';
+import TransportationColumnChart from './TransportationColumnChart';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const url = 'http://127.0.0.1:5000/itb';
 
 const DashboardOverall = () => {
-    const [slot, setSlot] = useState('week');
+    const [slot, setSlot] = useState('day');
     const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
     const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
     const [timeframe, setTimeframe] = useState('Day');
     const itb = useSelector((state) => state.itb);
+    const itbProfile = itb.cf_profile;
+
+    const most_used_transport =
+        (itbProfile &&
+            itbProfile.most_mode_transportation &&
+            Object.keys(itbProfile.most_mode_transportation).reduce(function (a, b) {
+                return itbProfile.most_mode_transportation[a] > itbProfile.most_mode_transportation[b] ? a : b;
+            })) ||
+        'Private motorcycle';
 
     const dispatch = useDispatch();
 
@@ -106,7 +116,7 @@ const DashboardOverall = () => {
                             </ListItem>
                         </Grid>
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
-                            <Stack spacing={0.5}>
+                            {/* <Stack spacing={0.5}>
                                 <Typography>Timeframe</Typography>
                                 <FormControl>
                                     <Select value={timeframe} onChange={(event) => setTimeframe(event.target.value)} label="Timeframe">
@@ -117,7 +127,7 @@ const DashboardOverall = () => {
                                         <MenuItem value={'Year'}>Year</MenuItem>
                                     </Select>
                                 </FormControl>
-                            </Stack>
+                            </Stack> */}
                         </Grid>
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
                             <Stack spacing={0.5}>
@@ -135,39 +145,113 @@ const DashboardOverall = () => {
                 </MainCard>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <HighlightProfile
-                    title="Carbon Footprint"
-                    count={`${(itb.cf_in_out['in_class'] + itb.cf_in_out['out_class']).toFixed(2)} kg CO2e`}
-                    percentage={27.4}
-                    isLoss
-                    color="warning"
-                    extra="1,943"
-                />
+                <Stack spacing={1}>
+                    <HighlightProfile
+                        title="Carbon Footprint"
+                        count={`${(itbProfile && itbProfile['total_cf'].toFixed(2)) || 0} kg CO2e`}
+                        percentage={27.4}
+                        isLoss
+                        color="warning"
+                        extra="1,943"
+                    />
+                    <HighlightProfile
+                        title="Total Students"
+                        count={`${(itbProfile && itbProfile['num_of_students']) || 0} students`}
+                        percentage={27.4}
+                        isLoss
+                        color="warning"
+                        extra="1,943"
+                    />
+                </Stack>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <HighlightProfile title="Distance to Campus" count="4.5 km" percentage={59.3} extra="35,000" />
+                <Stack spacing={1}>
+                    <HighlightProfile
+                        title="Carbon Footprint per Students"
+                        count={`${(itbProfile && itbProfile['avg_cf_students'].toFixed(2)) || 0} kg CO2e`}
+                        percentage={59.3}
+                        extra="35,000"
+                    />
+                    <HighlightProfile
+                        title="Daily Carbon Footprint Students"
+                        count={`${(itbProfile && itbProfile['avg_cf_students_daily'].toFixed(2)) || 0} kg CO2e`}
+                        percentage={59.3}
+                        extra="35,000"
+                    />
+                </Stack>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <HighlightProfile title="Laptop usage" count="8.5 hours" percentage={27.4} isLoss color="warning" extra="1,943" />
+                <Stack spacing={1}>
+                    <HighlightProfile
+                        title="Average distance"
+                        count={itbProfile && itbProfile.avg_distance.toFixed(2) + ' km'}
+                        percentage={27.4}
+                        isLoss
+                        color="warning"
+                        extra="1,943"
+                    />
+                    <HighlightProfile
+                        title="Average laptop usage"
+                        count={itbProfile && itbProfile.avg_laptop_usage.toFixed(2) + ' hours'}
+                        percentage={27.4}
+                        isLoss
+                        color="warning"
+                        extra="1,943"
+                    />
+                </Stack>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <MainCard contentSX={{ p: 2.25 }}>
                     <Stack spacing={0.5}>
                         <Typography variant="h6" color="textSecondary">
-                            Commuting Information
+                            IF Profile
                         </Typography>
                         <List sx={{ p: 0 }}>
                             <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Vehicle used" />
-                                <Typography>Motorcycle</Typography>
+                                <ListItemText primary="Total students" />
+                                <Typography>{itbProfile && itbProfile.IF.num_of_students}</Typography>
                             </ListItem>
                             <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Fuel used" />
-                                <Typography>Pertamax</Typography>
+                                <ListItemText primary="Total CF" />
+                                <Typography>{`${(itbProfile && itbProfile.IF.total_cf.toFixed(2)) || 0} kg CO2e`}</Typography>
                             </ListItem>
                             <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Travel time" />
-                                <Typography>45 minutes</Typography>
+                                <ListItemText primary="Average CF" />
+                                <Typography>{`${(itbProfile && itbProfile.IF.avg_cf_students.toFixed(2)) || 0} kg CO2e`}</Typography>
+                            </ListItem>
+                        </List>
+                        <Typography variant="h6" color="textSecondary" sx={{ pt: 1 }}>
+                            STI Profile
+                        </Typography>
+                        <List sx={{ p: 0 }}>
+                            <ListItem sx={{ p: 0 }}>
+                                <ListItemText primary="Total students" />
+                                <Typography>{itbProfile && itbProfile.STI.num_of_students}</Typography>
+                            </ListItem>
+                            <ListItem sx={{ p: 0 }}>
+                                <ListItemText primary="Total CF" />
+                                <Typography>{`${(itbProfile && itbProfile.STI.total_cf.toFixed(2)) || 0} kg CO2e`}</Typography>
+                            </ListItem>
+                            <ListItem sx={{ p: 0 }}>
+                                <ListItemText primary="Average CF" />
+                                <Typography>{`${(itbProfile && itbProfile.STI.avg_cf_students.toFixed(2)) || 0} kg CO2e`}</Typography>
+                            </ListItem>
+                        </List>
+                        <Typography variant="h6" color="textSecondary" sx={{ pt: 1 }}>
+                            MIF Profile
+                        </Typography>
+                        <List sx={{ p: 0 }}>
+                            <ListItem sx={{ p: 0 }}>
+                                <ListItemText primary="Total students" />
+                                <Typography>{itbProfile && itbProfile.MIF.num_of_students}</Typography>
+                            </ListItem>
+                            <ListItem sx={{ p: 0 }}>
+                                <ListItemText primary="Total CF" />
+                                <Typography>{`${(itbProfile && itbProfile.MIF.total_cf.toFixed(2)) || 0} kg CO2e`}</Typography>
+                            </ListItem>
+                            <ListItem sx={{ p: 0 }}>
+                                <ListItemText primary="Average CF" />
+                                <Typography>{`${(itbProfile && itbProfile.MIF.avg_cf_students.toFixed(2)) || 0} kg CO2e`}</Typography>
                             </ListItem>
                         </List>
                     </Stack>
@@ -194,11 +278,11 @@ const DashboardOverall = () => {
                             </Button>
                             <Button
                                 size="small"
-                                onClick={() => setSlot('week')}
-                                color={slot === 'week' ? 'primary' : 'secondary'}
-                                variant={slot === 'week' ? 'outlined' : 'text'}
+                                onClick={() => setSlot('day')}
+                                color={slot === 'day' ? 'primary' : 'secondary'}
+                                variant={slot === 'day' ? 'outlined' : 'text'}
                             >
-                                Week
+                                Day
                             </Button>
                         </Stack>
                     </Grid>
@@ -293,12 +377,12 @@ const DashboardOverall = () => {
                     <Box sx={{ p: 3, pb: 0 }}>
                         <Stack spacing={2}>
                             <Typography variant="h6" color="textSecondary">
-                                Period {startDate.format('YYYY-MM-DD')} until {endDate.format('YYYY-MM-DD')} statistics
+                                Based on {itbProfile && itbProfile.num_of_students} ITB students
                             </Typography>
-                            <Typography variant="h3">Paper-based is 30% greener</Typography>
+                            <Typography variant="h3">{most_used_transport} as the most used transportation</Typography>
                         </Stack>
                     </Box>
-                    <EmissionComparison isExam={true} coursesEmission={itb.cf_course_distribution} />
+                    <TransportationColumnChart transportationDistribution={itbProfile && itbProfile.most_mode_transportation} />
                 </MainCard>
             </Grid>
         </Grid>

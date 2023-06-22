@@ -34,18 +34,28 @@ import dayjs from 'dayjs';
 import { useDispatch, useSelector } from '../../../node_modules/react-redux/es/exports';
 import { calculateSuccess, startLoading } from 'store/reducers/major';
 import { formattedDate } from 'utils/format';
+import TransportationColumnChart from './TransportationColumnChart';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const url = 'http://127.0.0.1:5000/major';
 
 const DashboardMajor = () => {
-    const [slot, setSlot] = useState('week');
+    const [slot, setSlot] = useState('day');
     const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
     const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
     const [timeframe, setTimeframe] = useState('Day');
     const [major, setMajor] = useState('IF');
     const majorData = useSelector((state) => state.major);
+    const majorProfile = majorData.cf_profile;
+
+    const most_used_transport =
+        (majorProfile &&
+            majorProfile.most_mode_transportation &&
+            Object.keys(majorProfile.most_mode_transportation).reduce(function (a, b) {
+                return majorProfile.most_mode_transportation[a] > majorProfile.most_mode_transportation[b] ? a : b;
+            })) ||
+        'Private motorcycle';
 
     const dispatch = useDispatch();
 
@@ -102,7 +112,7 @@ const DashboardMajor = () => {
                             </Stack>
                         </Grid>
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
-                            <Stack spacing={0.5}>
+                            {/* <Stack spacing={0.5}>
                                 <Typography>Timeframe</Typography>
                                 <FormControl>
                                     <Select value={timeframe} onChange={(event) => setTimeframe(event.target.value)} label="Timeframe">
@@ -113,7 +123,7 @@ const DashboardMajor = () => {
                                         <MenuItem value={'Year'}>Year</MenuItem>
                                     </Select>
                                 </FormControl>
-                            </Stack>
+                            </Stack> */}
                         </Grid>
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
                             <Stack spacing={0.5}>
@@ -132,8 +142,8 @@ const DashboardMajor = () => {
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <HighlightProfile
-                    title="Carbon Footprint"
-                    count={`${(majorData.cf_in_out['in_class'] + majorData.cf_in_out['out_class']).toFixed(2)} kg CO2e`}
+                    title="Carbon Footprint Total"
+                    count={`${(majorProfile && majorProfile['total_cf'].toFixed(2)) || 0} kg CO2e`}
                     percentage={27.4}
                     isLoss
                     color="warning"
@@ -141,21 +151,51 @@ const DashboardMajor = () => {
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <HighlightProfile title="Distance to Campus" count="4.5 km" percentage={59.3} extra="35,000" />
+                <Stack spacing={1}>
+                    <HighlightProfile
+                        title="Carbon Footprint per Students"
+                        count={`${(majorProfile && majorProfile['avg_cf_students'].toFixed(2)) || 0} kg CO2e`}
+                        percentage={59.3}
+                        extra="35,000"
+                    />
+                    <HighlightProfile
+                        title="Daily Carbon Footprint Students"
+                        count={`${(majorProfile && majorProfile['avg_cf_students_daily'].toFixed(2)) || 0} kg CO2e`}
+                        percentage={59.3}
+                        extra="35,000"
+                    />
+                </Stack>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-                <HighlightProfile title="Laptop usage" count="8.5 hours" percentage={27.4} isLoss color="warning" extra="1,943" />
+                <Stack spacing={1}>
+                    <HighlightProfile
+                        title="Average distance"
+                        count={majorProfile && majorProfile.avg_distance.toFixed(2) + ' km'}
+                        percentage={27.4}
+                        isLoss
+                        color="warning"
+                        extra="1,943"
+                    />
+                    <HighlightProfile
+                        title="Average laptop usage"
+                        count={majorProfile && majorProfile.avg_laptop_usage.toFixed(2) + ' hours'}
+                        percentage={27.4}
+                        isLoss
+                        color="warning"
+                        extra="1,943"
+                    />
+                </Stack>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <MainCard contentSX={{ p: 2.25 }}>
                     <Stack spacing={0.5}>
                         <Typography variant="h6" color="textSecondary">
-                            Commuting Information
+                            Major Profile
                         </Typography>
                         <List sx={{ p: 0 }}>
                             <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Vehicle used" />
-                                <Typography>Motorcycle</Typography>
+                                <ListItemText primary="Total students" />
+                                <Typography>{majorProfile && majorProfile.num_of_students}</Typography>
                             </ListItem>
                             <ListItem sx={{ p: 0 }}>
                                 <ListItemText primary="Fuel used" />
@@ -190,11 +230,11 @@ const DashboardMajor = () => {
                             </Button>
                             <Button
                                 size="small"
-                                onClick={() => setSlot('week')}
-                                color={slot === 'week' ? 'primary' : 'secondary'}
-                                variant={slot === 'week' ? 'outlined' : 'text'}
+                                onClick={() => setSlot('day')}
+                                color={slot === 'day' ? 'primary' : 'secondary'}
+                                variant={slot === 'day' ? 'outlined' : 'text'}
                             >
-                                Week
+                                Day
                             </Button>
                         </Stack>
                     </Grid>
@@ -259,7 +299,7 @@ const DashboardMajor = () => {
                 </MainCard>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={7}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
                         <Typography variant="h5">Classes Emission Comparison</Typography>
@@ -278,10 +318,10 @@ const DashboardMajor = () => {
                     <EmissionComparison isExam={false} coursesEmission={majorData.cf_course_distribution} />
                 </MainCard>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={5}>
                 <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
-                        <Typography variant="h5">Paper-based vs Electronic-based</Typography>
+                        <Typography variant="h5">Commuting Transportation Distribution</Typography>
                     </Grid>
                     <Grid item />
                 </Grid>
@@ -289,12 +329,12 @@ const DashboardMajor = () => {
                     <Box sx={{ p: 3, pb: 0 }}>
                         <Stack spacing={2}>
                             <Typography variant="h6" color="textSecondary">
-                                Period {startDate.format('YYYY-MM-DD')} until {endDate.format('YYYY-MM-DD')} statistics
+                                Based on {majorProfile && majorProfile.num_of_students} {major} students
                             </Typography>
-                            <Typography variant="h3">Paper-based is 30% greener</Typography>
+                            <Typography variant="h3">{most_used_transport} as the most used transportation</Typography>
                         </Stack>
                     </Box>
-                    <EmissionComparison isExam={true} coursesEmission={majorData.cf_course_distribution} />
+                    <TransportationColumnChart transportationDistribution={majorProfile && majorProfile.most_mode_transportation} />
                 </MainCard>
             </Grid>
         </Grid>

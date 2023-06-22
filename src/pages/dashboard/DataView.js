@@ -41,7 +41,7 @@ const DataView = () => {
     useEffect(() => {
         const fetchData = async () => {
             const params = new URLSearchParams({
-                NIM: 13520115,
+                NIM: 23522011,
                 start_date: startDate ? formattedDate(startDate) : '2023-01-17',
                 end_date: endDate ? formattedDate(endDate) : '2023-04-20'
             });
