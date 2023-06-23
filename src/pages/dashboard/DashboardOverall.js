@@ -35,18 +35,21 @@ import { useDispatch, useSelector } from '../../../node_modules/react-redux/es/e
 import { calculateSuccess, startLoading } from 'store/reducers/itb';
 import { formattedDate } from 'utils/format';
 import TransportationColumnChart from './TransportationColumnChart';
+import DashboardOverallStats from './DashboardOverallStats';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const url = 'http://127.0.0.1:5000/itb';
 
 const DashboardOverall = () => {
+    const [level, setLevel] = useState('ITB');
     const [slot, setSlot] = useState('day');
     const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
     const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
     const [timeframe, setTimeframe] = useState('Day');
     const itb = useSelector((state) => state.itb);
     const itbProfile = itb.cf_profile;
+    console.log(level);
 
     const most_used_transport =
         (itbProfile &&
@@ -92,7 +95,35 @@ const DashboardOverall = () => {
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
             {/* row 1 */}
             <Grid item xs={12} sx={{ mb: -2.25 }}>
-                <Typography variant="h5">Overall Dashboard</Typography>
+                <Grid container alignItems="center" justifyContent="space-between">
+                    <Grid item>
+                        <Typography variant="h5">Overall Dashboard {level === 'Major Statistics' && ': Major Statistics'}</Typography>
+                    </Grid>
+                    <Grid item />
+                    <Grid item>
+                        <Stack direction="row" alignItems="center" spacing={1}>
+                            <Typography variant="subtitle1" spacing={4} sx={{ pb: 0.3 }}>
+                                Look by
+                            </Typography>
+                            <Button
+                                size="small"
+                                onClick={() => setLevel('ITB')}
+                                color={level === 'ITB' ? 'primary' : 'secondary'}
+                                variant={level === 'ITB' ? 'outlined' : 'text'}
+                            >
+                                ITB
+                            </Button>
+                            <Button
+                                size="small"
+                                onClick={() => setLevel('Major Statistics')}
+                                color={level === 'Major Statistics' ? 'primary' : 'secondary'}
+                                variant={level === 'Major Statistics' ? 'outlined' : 'text'}
+                            >
+                                Major Statistics
+                            </Button>
+                        </Stack>
+                    </Grid>
+                </Grid>
             </Grid>
             <Grid item xs={12} sm={12}>
                 <MainCard contentSX={{ p: 2.25 }}>
@@ -144,247 +175,198 @@ const DashboardOverall = () => {
                     </Grid>
                 </MainCard>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <Stack spacing={1}>
-                    <HighlightProfile
-                        title="Carbon Footprint"
-                        count={`${(itbProfile && itbProfile['total_cf'].toFixed(2)) || 0} kg CO2e`}
-                        percentage={27.4}
-                        isLoss
-                        color="warning"
-                        extra="1,943"
-                    />
-                    <HighlightProfile
-                        title="Total Students"
-                        count={`${(itbProfile && itbProfile['num_of_students']) || 0} students`}
-                        percentage={27.4}
-                        isLoss
-                        color="warning"
-                        extra="1,943"
-                    />
-                </Stack>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <Stack spacing={1}>
-                    <HighlightProfile
-                        title="Carbon Footprint per Students"
-                        count={`${(itbProfile && itbProfile['avg_cf_students'].toFixed(2)) || 0} kg CO2e`}
-                        percentage={59.3}
-                        extra="35,000"
-                    />
-                    <HighlightProfile
-                        title="Daily Carbon Footprint Students"
-                        count={`${(itbProfile && itbProfile['avg_cf_students_daily'].toFixed(2)) || 0} kg CO2e`}
-                        percentage={59.3}
-                        extra="35,000"
-                    />
-                </Stack>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <Stack spacing={1}>
-                    <HighlightProfile
-                        title="Average distance"
-                        count={itbProfile && itbProfile.avg_distance.toFixed(2) + ' km'}
-                        percentage={27.4}
-                        isLoss
-                        color="warning"
-                        extra="1,943"
-                    />
-                    <HighlightProfile
-                        title="Average laptop usage"
-                        count={itbProfile && itbProfile.avg_laptop_usage.toFixed(2) + ' hours'}
-                        percentage={27.4}
-                        isLoss
-                        color="warning"
-                        extra="1,943"
-                    />
-                </Stack>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <MainCard contentSX={{ p: 2.25 }}>
-                    <Stack spacing={0.5}>
-                        <Typography variant="h6" color="textSecondary">
-                            IF Profile
-                        </Typography>
-                        <List sx={{ p: 0 }}>
-                            <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Total students" />
-                                <Typography>{itbProfile && itbProfile.IF.num_of_students}</Typography>
-                            </ListItem>
-                            <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Total CF" />
-                                <Typography>{`${(itbProfile && itbProfile.IF.total_cf.toFixed(2)) || 0} kg CO2e`}</Typography>
-                            </ListItem>
-                            <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Average CF" />
-                                <Typography>{`${(itbProfile && itbProfile.IF.avg_cf_students.toFixed(2)) || 0} kg CO2e`}</Typography>
-                            </ListItem>
-                        </List>
-                        <Typography variant="h6" color="textSecondary" sx={{ pt: 1 }}>
-                            STI Profile
-                        </Typography>
-                        <List sx={{ p: 0 }}>
-                            <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Total students" />
-                                <Typography>{itbProfile && itbProfile.STI.num_of_students}</Typography>
-                            </ListItem>
-                            <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Total CF" />
-                                <Typography>{`${(itbProfile && itbProfile.STI.total_cf.toFixed(2)) || 0} kg CO2e`}</Typography>
-                            </ListItem>
-                            <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Average CF" />
-                                <Typography>{`${(itbProfile && itbProfile.STI.avg_cf_students.toFixed(2)) || 0} kg CO2e`}</Typography>
-                            </ListItem>
-                        </List>
-                        <Typography variant="h6" color="textSecondary" sx={{ pt: 1 }}>
-                            MIF Profile
-                        </Typography>
-                        <List sx={{ p: 0 }}>
-                            <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Total students" />
-                                <Typography>{itbProfile && itbProfile.MIF.num_of_students}</Typography>
-                            </ListItem>
-                            <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Total CF" />
-                                <Typography>{`${(itbProfile && itbProfile.MIF.total_cf.toFixed(2)) || 0} kg CO2e`}</Typography>
-                            </ListItem>
-                            <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Average CF" />
-                                <Typography>{`${(itbProfile && itbProfile.MIF.avg_cf_students.toFixed(2)) || 0} kg CO2e`}</Typography>
-                            </ListItem>
-                        </List>
-                    </Stack>
-                </MainCard>
-            </Grid>
+            {level === 'Major Statistics' ? (
+                <Grid item xs={12} sm={12}>
+                    {level === 'Major Statistics' && <DashboardOverallStats startDate={startDate} endDate={endDate} />}
+                </Grid>
+            ) : (
+                <>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Stack spacing={1}>
+                            <HighlightProfile
+                                title="Carbon Footprint"
+                                count={`${(itbProfile && itbProfile['total_cf'].toFixed(2)) || 0} kg CO2e`}
+                                percentage={27.4}
+                                isLoss
+                                color="warning"
+                                extra="1,943"
+                            />
+                            <HighlightProfile
+                                title="Total Students"
+                                count={`${(itbProfile && itbProfile['num_of_students']) || 0} students`}
+                                percentage={27.4}
+                                isLoss
+                                color="warning"
+                                extra="1,943"
+                            />
+                        </Stack>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Stack spacing={1}>
+                            <HighlightProfile
+                                title="Carbon Footprint per Students"
+                                count={`${(itbProfile && itbProfile['avg_cf_students'].toFixed(2)) || 0} kg CO2e`}
+                                percentage={59.3}
+                                extra="35,000"
+                            />
+                            <HighlightProfile
+                                title="Daily Carbon Footprint Students"
+                                count={`${(itbProfile && itbProfile['avg_cf_students_daily'].toFixed(2)) || 0} kg CO2e`}
+                                percentage={59.3}
+                                extra="35,000"
+                            />
+                        </Stack>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Stack spacing={1}>
+                            <HighlightProfile
+                                title="Average distance"
+                                count={itbProfile && itbProfile.avg_distance.toFixed(2) + ' km'}
+                                percentage={27.4}
+                                isLoss
+                                color="warning"
+                                extra="1,943"
+                            />
+                            <HighlightProfile
+                                title="Average laptop usage"
+                                count={itbProfile && itbProfile.avg_laptop_usage.toFixed(2) + ' hours'}
+                                percentage={27.4}
+                                isLoss
+                                color="warning"
+                                extra="1,943"
+                            />
+                        </Stack>
+                    </Grid>
 
-            <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
+                    <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 
-            {/* row 2 */}
-            <Grid item xs={12} md={8}>
-                <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid item>
-                        <Typography variant="h5">Carbon Footprint From Time to Time</Typography>
+                    {/* row 2 */}
+                    <Grid item xs={12} md={8}>
+                        <Grid container alignItems="center" justifyContent="space-between">
+                            <Grid item>
+                                <Typography variant="h5">Carbon Footprint From Time to Time</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Stack direction="row" alignItems="center" spacing={0}>
+                                    <Button
+                                        size="small"
+                                        onClick={() => setSlot('month')}
+                                        color={slot === 'month' ? 'primary' : 'secondary'}
+                                        variant={slot === 'month' ? 'outlined' : 'text'}
+                                    >
+                                        Month
+                                    </Button>
+                                    <Button
+                                        size="small"
+                                        onClick={() => setSlot('day')}
+                                        color={slot === 'day' ? 'primary' : 'secondary'}
+                                        variant={slot === 'day' ? 'outlined' : 'text'}
+                                    >
+                                        Day
+                                    </Button>
+                                </Stack>
+                            </Grid>
+                        </Grid>
+                        <MainCard content={false} sx={{ mt: 1.5 }}>
+                            <Box sx={{ pt: 1, pr: 2 }}>
+                                <EmissionPredictionSingle slot={slot} history={itb.cf_history} />
+                            </Box>
+                        </MainCard>
                     </Grid>
-                    <Grid item>
-                        <Stack direction="row" alignItems="center" spacing={0}>
-                            <Button
-                                size="small"
-                                onClick={() => setSlot('month')}
-                                color={slot === 'month' ? 'primary' : 'secondary'}
-                                variant={slot === 'month' ? 'outlined' : 'text'}
-                            >
-                                Month
-                            </Button>
-                            <Button
-                                size="small"
-                                onClick={() => setSlot('day')}
-                                color={slot === 'day' ? 'primary' : 'secondary'}
-                                variant={slot === 'day' ? 'outlined' : 'text'}
-                            >
-                                Day
-                            </Button>
-                        </Stack>
+                    <Grid item xs={12} md={4}>
+                        <Grid container alignItems="center" justifyContent="space-between">
+                            <Grid item>
+                                <Typography variant="h5">Green Action</Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid sx={{ mt: 2, mb: 4 }}>
+                            <GreenAction id={1} />
+                            <GreenAction id={2} />
+                            <GreenAction id={3} />
+                            <GreenAction id={4} />
+                        </Grid>
                     </Grid>
-                </Grid>
-                <MainCard content={false} sx={{ mt: 1.5 }}>
-                    <Box sx={{ pt: 1, pr: 2 }}>
-                        <EmissionPredictionSingle slot={slot} history={itb.cf_history} />
-                    </Box>
-                </MainCard>
-            </Grid>
-            <Grid item xs={12} md={4}>
-                <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid item>
-                        <Typography variant="h5">Green Action</Typography>
-                    </Grid>
-                </Grid>
-                <Grid sx={{ mt: 2, mb: 4 }}>
-                    <GreenAction id={1} />
-                    <GreenAction id={2} />
-                    <GreenAction id={3} />
-                    <GreenAction id={4} />
-                </Grid>
-            </Grid>
 
-            <Grid item xs={12} md={5} lg={4}>
-                <MainCard sx={{ mt: 2 }} content={false}>
-                    <Box sx={{ p: 3, pb: 2 }}>
-                        <Stack spacing={2}>
-                            <Typography variant="h6" color="textSecondary">
-                                Emission Category Distribution
-                            </Typography>
-                            <Typography>Commuting contribute the highest emission</Typography>
-                        </Stack>
-                    </Box>
-                    <EmissionDistribution distribution={itb.cf_category} />
-                </MainCard>
-            </Grid>
-            <Grid item xs={12} md={5} lg={4}>
-                <MainCard sx={{ mt: 2 }} content={false}>
-                    <Box sx={{ p: 3, pb: 2 }}>
-                        <Stack spacing={2}>
-                            <Typography variant="h6" color="textSecondary">
-                                Emission In-Class vs Out-Class
-                            </Typography>
-                            <Typography>Out-class activity contribute the most on learning</Typography>
-                        </Stack>
-                    </Box>
-                    <EmissionDistribution distribution={itb.cf_in_out} />
-                </MainCard>
-            </Grid>
-            <Grid item xs={12} md={5} lg={4}>
-                <MainCard sx={{ mt: 2 }} content={false}>
-                    <Box sx={{ p: 3, pb: 2 }}>
-                        <Stack spacing={2}>
-                            <Typography variant="h6" color="textSecondary">
-                                Emission Activity Distribution
-                            </Typography>
-                            <Typography>Coursework contribute the highest emission</Typography>
-                        </Stack>
-                    </Box>
-                    <EmissionDistribution distribution={itb.cf_activity} />
-                </MainCard>
-            </Grid>
+                    <Grid item xs={12} md={5} lg={4}>
+                        <MainCard sx={{ mt: 2 }} content={false}>
+                            <Box sx={{ p: 3, pb: 2 }}>
+                                <Stack spacing={2}>
+                                    <Typography variant="h6" color="textSecondary">
+                                        Emission Category Distribution
+                                    </Typography>
+                                    <Typography>Commuting contribute the highest emission</Typography>
+                                </Stack>
+                            </Box>
+                            <EmissionDistribution distribution={itb.cf_category} />
+                        </MainCard>
+                    </Grid>
+                    <Grid item xs={12} md={5} lg={4}>
+                        <MainCard sx={{ mt: 2 }} content={false}>
+                            <Box sx={{ p: 3, pb: 2 }}>
+                                <Stack spacing={2}>
+                                    <Typography variant="h6" color="textSecondary">
+                                        Emission In-Class vs Out-Class
+                                    </Typography>
+                                    <Typography>Out-class activity contribute the most on learning</Typography>
+                                </Stack>
+                            </Box>
+                            <EmissionDistribution distribution={itb.cf_in_out} />
+                        </MainCard>
+                    </Grid>
+                    <Grid item xs={12} md={5} lg={4}>
+                        <MainCard sx={{ mt: 2 }} content={false}>
+                            <Box sx={{ p: 3, pb: 2 }}>
+                                <Stack spacing={2}>
+                                    <Typography variant="h6" color="textSecondary">
+                                        Emission Activity Distribution
+                                    </Typography>
+                                    <Typography>Coursework contribute the highest emission</Typography>
+                                </Stack>
+                            </Box>
+                            <EmissionDistribution distribution={itb.cf_activity} />
+                        </MainCard>
+                    </Grid>
 
-            <Grid item xs={12} md={6}>
-                <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid item>
-                        <Typography variant="h5">Classes Emission Comparison</Typography>
+                    <Grid item xs={12} md={6}>
+                        <Grid container alignItems="center" justifyContent="space-between">
+                            <Grid item>
+                                <Typography variant="h5">Classes Emission Comparison</Typography>
+                            </Grid>
+                            <Grid item />
+                        </Grid>
+                        <MainCard sx={{ mt: 2 }} content={false}>
+                            <Box sx={{ p: 3, pb: 0 }}>
+                                <Stack spacing={2}>
+                                    <Typography variant="h6" color="textSecondary">
+                                        Period {startDate.format('YYYY-MM-DD')} until {endDate.format('YYYY-MM-DD')} statistics
+                                    </Typography>
+                                    <Typography variant="h3">50.4 kg CO2e produced from Electricity</Typography>
+                                </Stack>
+                            </Box>
+                            <EmissionComparison isExam={false} coursesEmission={itb.cf_course_distribution} />
+                        </MainCard>
                     </Grid>
-                    <Grid item />
-                </Grid>
-                <MainCard sx={{ mt: 2 }} content={false}>
-                    <Box sx={{ p: 3, pb: 0 }}>
-                        <Stack spacing={2}>
-                            <Typography variant="h6" color="textSecondary">
-                                Period {startDate.format('YYYY-MM-DD')} until {endDate.format('YYYY-MM-DD')} statistics
-                            </Typography>
-                            <Typography variant="h3">50.4 kg CO2e produced from Electricity</Typography>
-                        </Stack>
-                    </Box>
-                    <EmissionComparison isExam={false} coursesEmission={itb.cf_course_distribution} />
-                </MainCard>
-            </Grid>
-            <Grid item xs={12} md={6}>
-                <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid item>
-                        <Typography variant="h5">Paper-based vs Electronic-based</Typography>
+                    <Grid item xs={12} md={6}>
+                        <Grid container alignItems="center" justifyContent="space-between">
+                            <Grid item>
+                                <Typography variant="h5">Paper-based vs Electronic-based</Typography>
+                            </Grid>
+                            <Grid item />
+                        </Grid>
+                        <MainCard sx={{ mt: 2 }} content={false}>
+                            <Box sx={{ p: 3, pb: 0 }}>
+                                <Stack spacing={2}>
+                                    <Typography variant="h6" color="textSecondary">
+                                        Based on {itbProfile && itbProfile.num_of_students} ITB students
+                                    </Typography>
+                                    <Typography variant="h3">{most_used_transport} as the most used transportation</Typography>
+                                </Stack>
+                            </Box>
+                            <TransportationColumnChart transportationDistribution={itbProfile && itbProfile.most_mode_transportation} />
+                        </MainCard>
                     </Grid>
-                    <Grid item />
-                </Grid>
-                <MainCard sx={{ mt: 2 }} content={false}>
-                    <Box sx={{ p: 3, pb: 0 }}>
-                        <Stack spacing={2}>
-                            <Typography variant="h6" color="textSecondary">
-                                Based on {itbProfile && itbProfile.num_of_students} ITB students
-                            </Typography>
-                            <Typography variant="h3">{most_used_transport} as the most used transportation</Typography>
-                        </Stack>
-                    </Box>
-                    <TransportationColumnChart transportationDistribution={itbProfile && itbProfile.most_mode_transportation} />
-                </MainCard>
-            </Grid>
+                </>
+            )}
         </Grid>
     );
 };

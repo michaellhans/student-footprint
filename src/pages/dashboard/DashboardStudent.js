@@ -56,6 +56,10 @@ const NIM_list = [
     18219106, 18219104, 18220103, 18221002, 13520020
 ];
 
+function get_percentage(value, avg) {
+    return (Math.abs(value - avg) / avg) * 100;
+}
+
 const DashboardStudent = () => {
     const [slot, setSlot] = useState('day');
     const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
@@ -179,28 +183,31 @@ const DashboardStudent = () => {
                 <HighlightProfile
                     title="Carbon Footprint"
                     count={`${(student.cf_in_out['in_class'] + student.cf_in_out['out_class']).toFixed(2)} kg CO2e`}
-                    percentage={27.4}
-                    isLoss
-                    color="warning"
-                    extra="1,943"
+                    percentage={35}
+                    isLoss={false}
+                    extra={45.6}
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <HighlightProfile
                     title="Distance to Campus"
                     count={(stdProfile && stdProfile.distance) + ' km'}
-                    percentage={59.3}
-                    extra="35,000"
+                    isLoss={stdProfile && stdProfile.distance <= stdProfile.comparison.avg_distance}
+                    percentage={stdProfile && get_percentage(stdProfile.distance, stdProfile.comparison.avg_distance).toFixed(1)}
+                    extra={(stdProfile && Math.abs(stdProfile.distance - stdProfile.comparison.avg_distance).toFixed(1)) + ' km'}
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <HighlightProfile
                     title="Laptop usage"
                     count={stdProfile && stdProfile.day_laptop_total + ' hours'}
-                    percentage={27.4}
-                    isLoss
-                    color="warning"
-                    extra="1,943"
+                    isLoss={stdProfile && stdProfile.day_laptop_total <= stdProfile.comparison.avg_laptop_usage}
+                    percentage={
+                        stdProfile && get_percentage(stdProfile.day_laptop_total, stdProfile.comparison.avg_laptop_usage).toFixed(1)
+                    }
+                    extra={
+                        (stdProfile && Math.abs(stdProfile.day_laptop_total - stdProfile.comparison.avg_laptop_usage).toFixed(1)) + ' hours'
+                    }
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
