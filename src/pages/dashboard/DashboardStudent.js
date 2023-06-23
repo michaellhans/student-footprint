@@ -67,6 +67,7 @@ const DashboardStudent = () => {
     const [NIM, setNIM] = useState('23522011');
     const student = useSelector((state) => state.student);
     const stdProfile = student.cf_profile;
+    const green_action = student.green_action;
     const [isProfilePage, setIsProfilePage] = useState(stdProfile == null);
     const avatar = stdProfile && stdProfile.gender == 'Female' ? avatar1 : avatar2;
     // Change it into == null again later
@@ -307,10 +308,10 @@ const DashboardStudent = () => {
                     </Grid>
                 </Grid>
                 <Grid sx={{ mt: 2, mb: 4 }}>
-                    <GreenAction id={1} />
-                    <GreenAction id={2} />
-                    <GreenAction id={3} />
-                    <GreenAction id={4} />
+                    <GreenAction
+                        green_action={green_action}
+                        total_emission={student.cf_in_out['in_class'] + student.cf_in_out['out_class']}
+                    />
                 </Grid>
             </Grid>
 

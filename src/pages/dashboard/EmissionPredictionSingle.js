@@ -6,6 +6,7 @@ import { useTheme } from '@mui/material/styles';
 
 // third-party
 import ReactApexChart from 'react-apexcharts';
+import { longFormattedDate } from 'utils/format';
 
 // chart options
 const lineChartOptions = {
@@ -52,7 +53,7 @@ const EmissionPredictionSingle = ({ slot, history }) => {
         }
 
         // Extract list of dates
-        const dateList = history.map((item) => item.date);
+        const dateList = history.map((item) => longFormattedDate(item.date));
 
         let finalData, finalDate;
         if (slot == 'day') {

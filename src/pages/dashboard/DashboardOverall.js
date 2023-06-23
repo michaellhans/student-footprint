@@ -46,9 +46,9 @@ const DashboardOverall = () => {
     const [slot, setSlot] = useState('day');
     const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
     const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
-    const [timeframe, setTimeframe] = useState('Day');
     const itb = useSelector((state) => state.itb);
     const itbProfile = itb.cf_profile;
+    const green_action = itb.green_action;
     console.log(level);
 
     const most_used_transport =
@@ -280,10 +280,10 @@ const DashboardOverall = () => {
                             </Grid>
                         </Grid>
                         <Grid sx={{ mt: 2, mb: 4 }}>
-                            <GreenAction id={1} />
-                            <GreenAction id={2} />
-                            <GreenAction id={3} />
-                            <GreenAction id={4} />
+                            <GreenAction
+                                green_action={green_action}
+                                total_emission={itb.cf_in_out['in_class'] + itb.cf_in_out['out_class']}
+                            />
                         </Grid>
                     </Grid>
 

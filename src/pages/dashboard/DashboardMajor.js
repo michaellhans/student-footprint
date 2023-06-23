@@ -48,6 +48,7 @@ const DashboardMajor = () => {
     const [major, setMajor] = useState('IF');
     const majorData = useSelector((state) => state.major);
     const majorProfile = majorData.cf_profile;
+    const green_action = majorData.green_action;
 
     const most_used_transport =
         (majorProfile &&
@@ -252,10 +253,10 @@ const DashboardMajor = () => {
                     </Grid>
                 </Grid>
                 <Grid sx={{ mt: 2, mb: 4 }}>
-                    <GreenAction id={1} />
-                    <GreenAction id={2} />
-                    <GreenAction id={3} />
-                    <GreenAction id={4} />
+                    <GreenAction
+                        green_action={green_action}
+                        total_emission={majorData.cf_in_out['in_class'] + majorData.cf_in_out['out_class']}
+                    />
                 </Grid>
             </Grid>
 

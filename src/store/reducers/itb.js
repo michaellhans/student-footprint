@@ -24,7 +24,12 @@ const initialState = {
     },
     cf_history: [],
     cf_profile: null,
-    cf_course_distribution: []
+    cf_course_distribution: [],
+    green_action: {
+        walking: 0,
+        carpool: 0,
+        energy_saving: 0
+    }
 };
 
 // ==============================|| SLICE - ITB ||============================== //
@@ -50,6 +55,7 @@ const itb = createSlice({
             state.cf_history = action.payload.details.cf_history;
             state.cf_course_distribution = action.payload.details.cf_course_distribution;
             state.cf_profile = action.payload.details.cf_profile;
+            state.green_action = action.payload.details.green_action;
         }
     }
 });

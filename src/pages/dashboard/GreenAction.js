@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 import walking from 'assets/images/actions/walking.png';
 import electricity from 'assets/images/actions/electricity.jpg';
+import carpool from 'assets/images/actions/carpool.png';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import MainCard from 'components/MainCard';
 import PropTypes from 'prop-types';
@@ -15,12 +16,24 @@ const Img = styled('img')({
     maxHeight: '100%'
 });
 
-GreenAction.propTypes = {
-    id: PropTypes.number
+GreenCard.propTypes = {
+    id: PropTypes.number,
+    percentage: PropTypes.number,
+    value: PropTypes.number,
+    action: PropTypes.string
 };
 
-function GreenAction({ id }) {
-    const reduction = Math.random() * 100;
+GreenAction.propTypes = {
+    green_action: PropTypes.object,
+    total_emission: PropTypes.number
+};
+
+function get_percentage(value, avg) {
+    console.log(value, avg);
+    return (Math.abs(value - avg) / avg) * 100;
+}
+
+function GreenCard({ id, percentage, value, action }) {
     return (
         <MainCard
             sx={{
@@ -31,22 +44,50 @@ function GreenAction({ id }) {
             <Grid container spacing={2}>
                 <Grid item>
                     <ButtonBase sx={{ width: 64, height: 64 }}>
-                        <Img alt="complex" src={id % 2 == 0 ? walking : electricity} />
+                        <Img alt="complex" src={id % 3 == 0 ? walking : id % 3 == 1 ? electricity : carpool} />
                     </ButtonBase>
                 </Grid>
                 <Grid item xs={12} sm container direction="column" spacing={0.5}>
                     <Grid item xs>
                         <Typography gutterBottom variant="subtitle1" component="div">
-                            Reduce {parseInt(100 - reduction, 10)}% carbon with {id % 2 == 0 ? 'walking' : 'energy saving'}
+                            Reduce {parseInt(percentage, 10)}% carbon with {action}
                         </Typography>
                     </Grid>
                     <Grid item xs>
-                        <ProgressBar now={parseInt(reduction, 10)} style={{ height: 22 }} variant="warning" />
+                        <ProgressBar
+                            now={parseInt(100 - percentage, 10)}
+                            label={value.toFixed(2) + ' kg CO2e'}
+                            style={{ height: 22 }}
+                            variant="warning"
+                        />
                     </Grid>
                 </Grid>
             </Grid>
         </MainCard>
     );
+}
+
+function GreenAction({ green_action, total_emission }) {
+    const actions = Object.keys(green_action);
+    const reductions = Object.values(green_action);
+    const percentages = reductions.map((value) => get_percentage(value, total_emission));
+    let green_cards_data = actions.map((action, index) => ({
+        id: index,
+        action: action,
+        value: reductions[index],
+        percentage: percentages[index]
+    }));
+
+    green_cards_data.sort((a, b) => b.percentage - a.percentage);
+    console.log(green_cards_data);
+
+    const green_cards = [];
+    for (let idx = 0; idx <= 2; idx++) {
+        const { id, action, value, percentage } = green_cards_data[idx];
+        green_cards.push(<GreenCard id={id} action={action} value={value} percentage={percentage} />);
+    }
+
+    return <div>{green_cards}</div>;
 }
 
 export default GreenAction;
