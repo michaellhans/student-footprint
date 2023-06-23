@@ -167,7 +167,6 @@ export default function EmissionTable() {
     const [isLoading, setIsLoading] = useState(true);
 
     const [orderBy, setOrderBy] = useState('date');
-    console.log(orderBy);
     const [order, setOrder] = useState('asc');
     const [selected] = useState([]);
 

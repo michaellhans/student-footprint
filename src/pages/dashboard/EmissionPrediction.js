@@ -72,8 +72,6 @@ const EmissionPrediction = ({ slot, history }) => {
                 finalDate = Object.keys(agg);
             });
         }
-        console.log(finalData);
-        console.log(finalDate);
 
         const finalSeries = Object.keys(finalData).map((key) => ({
             name: key,

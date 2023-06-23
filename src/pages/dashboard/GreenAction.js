@@ -29,7 +29,6 @@ GreenAction.propTypes = {
 };
 
 function get_percentage(value, avg) {
-    console.log(value, avg);
     return (Math.abs(value - avg) / avg) * 100;
 }
 
@@ -79,7 +78,6 @@ function GreenAction({ green_action, total_emission }) {
     }));
 
     green_cards_data.sort((a, b) => b.percentage - a.percentage);
-    console.log(green_cards_data);
 
     const green_cards = [];
     for (let idx = 0; idx <= 2; idx++) {

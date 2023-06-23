@@ -34,7 +34,6 @@ const DashboardOverallStats = ({ startDate, endDate }) => {
                 const response = await fetch(`${url}?${params.toString()}`);
                 if (response.ok) {
                     const res = await response.json();
-                    console.log(res.data);
                     setHistory(res.data.cf_history);
                     setProfile(res.data.cf_profile);
 

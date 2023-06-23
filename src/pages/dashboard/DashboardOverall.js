@@ -35,7 +35,6 @@ const DashboardOverall = () => {
     const itbProfile = itb.cf_profile;
     const green_action = itb.green_action;
     const isLoading = itb.isLoading;
-    console.log(level);
 
     const most_used_transport =
         (itbProfile &&

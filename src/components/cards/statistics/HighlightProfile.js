@@ -11,7 +11,7 @@ import { RiseOutlined, FallOutlined } from '@ant-design/icons';
 
 // ==============================|| STATISTICS - ECOMMERCE CARD  ||============================== //
 
-const HighlightProfile = ({ color, title, count, percentage, isLoss, extra }) => (
+const HighlightProfile = ({ title, count, percentage, isLoss, extra }) => (
     <MainCard contentSX={{ p: 2.25 }}>
         <Stack spacing={0.5}>
             <Typography variant="h6" color="textSecondary">
@@ -55,7 +55,6 @@ const HighlightProfile = ({ color, title, count, percentage, isLoss, extra }) =>
 );
 
 HighlightProfile.propTypes = {
-    color: PropTypes.string,
     title: PropTypes.string,
     count: PropTypes.string,
     percentage: PropTypes.number,
