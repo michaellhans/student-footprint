@@ -34,7 +34,7 @@ import dayjs from 'dayjs';
 import { useDispatch, useSelector } from '../../../node_modules/react-redux/es/exports';
 import { calculateSuccess, startLoading } from 'store/reducers/itb';
 import { formattedDate } from 'utils/format';
-import TransportationColumnChart from './TransportationColumnChart';
+import VerticalBarChart from './VerticalBarChart';
 import PropTypes from 'prop-types';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
@@ -90,7 +90,7 @@ const DashboardOverallStats = ({ startDate, endDate }) => {
                         <List sx={{ p: 0 }}>
                             <ListItem sx={{ p: 0 }}>
                                 <ListItemText primary="Total students" />
-                                <Typography>{`${profile && profile.ITB.num_of_students} students`}</Typography>
+                                <Typography>{`${(profile && profile.ITB.num_of_students) || 0} students`}</Typography>
                             </ListItem>
                             <ListItem sx={{ p: 0 }}>
                                 <ListItemText primary="Total CF" />
@@ -113,7 +113,7 @@ const DashboardOverallStats = ({ startDate, endDate }) => {
                         <List sx={{ p: 0 }}>
                             <ListItem sx={{ p: 0 }}>
                                 <ListItemText primary="Total students" />
-                                <Typography>{`${profile && profile.IF.num_of_students} students`}</Typography>
+                                <Typography>{`${(profile && profile.IF.num_of_students) || 0} students`}</Typography>
                             </ListItem>
                             <ListItem sx={{ p: 0 }}>
                                 <ListItemText primary="Total CF" />
@@ -136,7 +136,7 @@ const DashboardOverallStats = ({ startDate, endDate }) => {
                         <List sx={{ p: 0 }}>
                             <ListItem sx={{ p: 0 }}>
                                 <ListItemText primary="Total students" />
-                                <Typography>{`${profile && profile.STI.num_of_students} students`}</Typography>
+                                <Typography>{`${(profile && profile.STI.num_of_students) || 0} students`}</Typography>
                             </ListItem>
                             <ListItem sx={{ p: 0 }}>
                                 <ListItemText primary="Total CF" />
@@ -159,7 +159,7 @@ const DashboardOverallStats = ({ startDate, endDate }) => {
                         <List sx={{ p: 0 }}>
                             <ListItem sx={{ p: 0 }}>
                                 <ListItemText primary="Total students" />
-                                <Typography>{`${profile && profile.MIF.num_of_students} students`}</Typography>
+                                <Typography>{`${(profile && profile.MIF.num_of_students) || 0} students`}</Typography>
                             </ListItem>
                             <ListItem sx={{ p: 0 }}>
                                 <ListItemText primary="Total CF" />
@@ -217,7 +217,7 @@ const DashboardOverallStats = ({ startDate, endDate }) => {
                     <Grid item />
                 </Grid>
                 <MainCard sx={{ mt: 2 }} content={false}>
-                    <TransportationColumnChart transportationDistribution={comparison} />
+                    <VerticalBarChart transportationDistribution={comparison} unit={'kg CO2e'} />
                 </MainCard>
             </Grid>
         </Grid>

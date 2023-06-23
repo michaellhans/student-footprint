@@ -34,7 +34,7 @@ import dayjs from 'dayjs';
 import { useDispatch, useSelector } from '../../../node_modules/react-redux/es/exports';
 import { calculateSuccess, startLoading } from 'store/reducers/itb';
 import { formattedDate } from 'utils/format';
-import TransportationColumnChart from './TransportationColumnChart';
+import VerticalBarChart from './VerticalBarChart';
 import DashboardOverallStats from './DashboardOverallStats';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
@@ -362,7 +362,10 @@ const DashboardOverall = () => {
                                     <Typography variant="h3">{most_used_transport} as the most used transportation</Typography>
                                 </Stack>
                             </Box>
-                            <TransportationColumnChart transportationDistribution={itbProfile && itbProfile.most_mode_transportation} />
+                            <VerticalBarChart
+                                transportationDistribution={itbProfile && itbProfile.most_mode_transportation}
+                                unit={'students'}
+                            />
                         </MainCard>
                     </Grid>
                 </>

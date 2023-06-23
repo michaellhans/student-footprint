@@ -34,7 +34,7 @@ import dayjs from 'dayjs';
 import { useDispatch, useSelector } from '../../../node_modules/react-redux/es/exports';
 import { calculateSuccess, startLoading } from 'store/reducers/major';
 import { formattedDate } from 'utils/format';
-import TransportationColumnChart from './TransportationColumnChart';
+import VerticalBarChart from './VerticalBarChart';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
@@ -334,7 +334,10 @@ const DashboardMajor = () => {
                             <Typography variant="h3">{most_used_transport} as the most used transportation</Typography>
                         </Stack>
                     </Box>
-                    <TransportationColumnChart transportationDistribution={majorProfile && majorProfile.most_mode_transportation} />
+                    <VerticalBarChart
+                        transportationDistribution={majorProfile && majorProfile.most_mode_transportation}
+                        unit={'students'}
+                    />
                 </MainCard>
             </Grid>
         </Grid>

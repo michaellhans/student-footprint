@@ -33,11 +33,6 @@ const columnChartOptions = {
     xaxis: {
         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
     },
-    yaxis: {
-        title: {
-            text: '$ (students)'
-        }
-    },
     fill: {
         opacity: 1
     },
@@ -82,7 +77,7 @@ const columnChartOptions = {
 
 // ==============================|| SALES COLUMN CHART ||============================== //
 
-const TransportationColumnChart = ({ transportationDistribution }) => {
+const VerticalBarChart = ({ transportationDistribution, unit }) => {
     const theme = useTheme();
 
     const { primary, secondary } = theme.palette.text;
@@ -105,7 +100,7 @@ const TransportationColumnChart = ({ transportationDistribution }) => {
     useEffect(() => {
         if (transportationDistribution !== null) {
             setCategories(Object.keys(transportationDistribution));
-            setSeries([{ name: 'Total', data: Object.values(transportationDistribution) }]);
+            setSeries([{ name: 'Total', data: Object.values(transportationDistribution).map((value) => parseInt(value)) }]);
         }
     }, [transportationDistribution]);
 
@@ -132,7 +127,12 @@ const TransportationColumnChart = ({ transportationDistribution }) => {
                 borderColor: line
             },
             tooltip: {
-                theme: 'light'
+                theme: 'light',
+                y: {
+                    formatter(val) {
+                        return `${val}` + ' ' + unit;
+                    }
+                }
             },
             legend: {
                 position: 'top',
@@ -142,7 +142,7 @@ const TransportationColumnChart = ({ transportationDistribution }) => {
                 }
             }
         }));
-    }, [primary, secondary, line, warning, primaryMain, successDark, categories]);
+    }, [primary, secondary, line, warning, primaryMain, successDark, categories, unit]);
 
     return (
         <div id="chart">
@@ -151,8 +151,9 @@ const TransportationColumnChart = ({ transportationDistribution }) => {
     );
 };
 
-TransportationColumnChart.propTypes = {
-    transportationDistribution: PropTypes.object
+VerticalBarChart.propTypes = {
+    transportationDistribution: PropTypes.object,
+    unit: PropTypes.string
 };
 
-export default TransportationColumnChart;
+export default VerticalBarChart;
