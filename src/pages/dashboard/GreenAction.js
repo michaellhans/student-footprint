@@ -82,7 +82,7 @@ function GreenAction({ green_action, total_emission }) {
     const green_cards = [];
     for (let idx = 0; idx <= 2; idx++) {
         const { id, action, value, percentage } = green_cards_data[idx];
-        green_cards.push(<GreenCard id={id} action={action} value={value} percentage={percentage} />);
+        green_cards.push(<GreenCard key={id} id={id} action={action} value={value} percentage={percentage} />);
     }
 
     return <div>{green_cards}</div>;

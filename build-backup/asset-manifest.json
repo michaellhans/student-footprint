@@ -1,0 +1,33 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d6696123.css",
+    "main.js": "/static/js/main.478f8b28.js",
+    "static/js/243.24c63e69.chunk.js": "/static/js/243.24c63e69.chunk.js",
+    "static/js/180.49aaf1f6.chunk.js": "/static/js/180.49aaf1f6.chunk.js",
+    "static/js/902.53ff31b4.chunk.js": "/static/js/902.53ff31b4.chunk.js",
+    "static/js/496.036f2fc6.chunk.js": "/static/js/496.036f2fc6.chunk.js",
+    "static/js/352.200da825.chunk.js": "/static/js/352.200da825.chunk.js",
+    "static/js/564.455af9d3.chunk.js": "/static/js/564.455af9d3.chunk.js",
+    "static/js/525.22e09919.chunk.js": "/static/js/525.22e09919.chunk.js",
+    "static/js/893.c768617a.chunk.js": "/static/js/893.c768617a.chunk.js",
+    "static/js/165.c07f5932.chunk.js": "/static/js/165.c07f5932.chunk.js",
+    "static/js/522.01dbe5b0.chunk.js": "/static/js/522.01dbe5b0.chunk.js",
+    "static/js/66.c288608e.chunk.js": "/static/js/66.c288608e.chunk.js",
+    "static/js/200.e8abb3a0.chunk.js": "/static/js/200.e8abb3a0.chunk.js",
+    "static/js/970.cd474a64.chunk.js": "/static/js/970.cd474a64.chunk.js",
+    "static/js/971.3ee9b35f.chunk.js": "/static/js/971.3ee9b35f.chunk.js",
+    "static/js/381.af4d9b1c.chunk.js": "/static/js/381.af4d9b1c.chunk.js",
+    "static/js/526.e7d3ef3f.chunk.js": "/static/js/526.e7d3ef3f.chunk.js",
+    "static/js/466.f7389582.chunk.js": "/static/js/466.f7389582.chunk.js",
+    "static/media/itb.png": "/static/media/itb.36e0d0271575892a4eaf.png",
+    "static/media/electricity.jpg": "/static/media/electricity.8dcf50fda196414e9329.jpg",
+    "index.html": "/index.html",
+    "static/media/google.svg": "/static/media/google.b7da2ce748745374ee27eb11dd475b9c.svg",
+    "static/media/twitter.svg": "/static/media/twitter.5b9c9738bc8e86846c91f27886cebacf.svg",
+    "static/media/facebook.svg": "/static/media/facebook.5b823a6232805871728da1033d817609.svg"
+  },
+  "entrypoints": [
+    "static/css/main.d6696123.css",
+    "static/js/main.478f8b28.js"
+  ]
+}

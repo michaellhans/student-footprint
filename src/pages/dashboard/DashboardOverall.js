@@ -29,8 +29,8 @@ const url = 'http://127.0.0.1:5000/itb';
 const DashboardOverall = () => {
     const [level, setLevel] = useState('ITB');
     const [slot, setSlot] = useState('day');
-    const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
-    const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
+    const [startDate, setStartDate] = useState(dayjs('2022-08-01'));
+    const [endDate, setEndDate] = useState(dayjs('2022-12-31'));
     const itb = useSelector((state) => state.itb);
     const itbProfile = itb.cf_profile;
     const green_action = itb.green_action;
@@ -57,8 +57,8 @@ const DashboardOverall = () => {
     useEffect(() => {
         const fetchData = async () => {
             const params = new URLSearchParams({
-                start_date: startDate ? formattedDate(startDate) : '2023-01-16',
-                end_date: endDate ? formattedDate(endDate) : '2023-05-30'
+                start_date: startDate ? formattedDate(startDate) : '2022-08-01',
+                end_date: endDate ? formattedDate(endDate) : '2022-12-31'
             });
             try {
                 const response = await fetch(`${url}?${params.toString()}`);
@@ -87,8 +87,8 @@ const DashboardOverall = () => {
                     <Grid item />
                     <Grid item>
                         <Stack direction="row" alignItems="center" spacing={1}>
-                            <Typography variant="subtitle1" spacing={4} sx={{ pb: 0.3 }}>
-                                Look by
+                            <Typography variant="subtitle1" spacing={4} sx={{ pb: 0.1, pt: 0.3 }}>
+                                Mode
                             </Typography>
                             <Button
                                 size="small"

@@ -45,7 +45,9 @@ const EmissionPredictionSingle = ({ slot, history }) => {
 
     useEffect(() => {
         // Extract list of total emission
-        const totalEmissionList = history.map((item) => item.total_emission);
+        const totalEmissionList = history
+            .filter((item) => item.hasOwnProperty('total_emission') && item.total_emission !== 0)
+            .map((item) => item.total_emission);
 
         let finalPredicted;
         if (history.length > 0 && history[0].predicted_emission) {
@@ -95,7 +97,7 @@ const EmissionPredictionSingle = ({ slot, history }) => {
             setSeries([
                 {
                     name: 'Real Emission',
-                    data: finalData
+                    data: finalData.filter((value) => value !== 0)
                 },
                 {
                     name: 'Predicted Emission',
@@ -107,7 +109,7 @@ const EmissionPredictionSingle = ({ slot, history }) => {
             setSeries([
                 {
                     name: 'Real Emission',
-                    data: finalData
+                    data: finalData.filter((value) => value !== 0)
                 }
             ]);
         }
@@ -152,7 +154,7 @@ const EmissionPredictionSingle = ({ slot, history }) => {
             // },
             yaxis: {
                 labels: {
-                    formatter: (value) => `${value.toFixed(2)} kg CO2e`,
+                    formatter: (value) => `${value && value.toFixed(2)} kg CO2e`,
                     style: {
                         colors: [secondary]
                     }

@@ -85,7 +85,7 @@ const EmissionPrediction = ({ slot, history }) => {
     useEffect(() => {
         setOptions((prevState) => ({
             ...prevState,
-            colors: [theme.palette.primary.main, theme.palette.primary[900], theme.palette.primary.light],
+            colors: [theme.palette.secondary.dark, theme.palette.primary.main, theme.palette.primary[900], theme.palette.primary.light],
             xaxis: {
                 categories: categories,
                 labels: {
@@ -114,7 +114,7 @@ const EmissionPrediction = ({ slot, history }) => {
             },
             yaxis: {
                 labels: {
-                    formatter: (value) => `${value.toFixed(2)} kg CO2e`,
+                    formatter: (value) => `${value && value.toFixed(2)} kg CO2e`,
                     style: {
                         colors: [secondary]
                     }

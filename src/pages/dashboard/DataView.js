@@ -1,22 +1,22 @@
 import { useState, useEffect, Fragment } from 'react';
-import { useDispatch } from '../../../node_modules/react-redux/es/exports';
+import { useDispatch, useSelector } from '../../../node_modules/react-redux/es/exports';
 import { calculateSuccess, startLoading } from 'store/reducers/student';
 
 // material-ui
-import { Avatar, Button, FormControl, Grid, ListItem, ListItemAvatar, ListItemText, MenuItem, Stack, Typography } from '@mui/material';
-
-import Select from '@mui/material/Select';
+import { Avatar, Button, Autocomplete, TextField, Grid, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from '@mui/material';
 
 import { DatePicker } from '@mui/x-date-pickers-pro';
 
 // project import
 import EmissionTable from './EmissionTable';
-import MainCard from 'components/MainCard';
+import MainCard from 'components/MainCard'; // assets
+import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
 import { formattedDate } from 'utils/format';
 import dayjs from 'dayjs';
 import EmissionTableMajor from './EmissionTableMajor';
 import EmissionTableStudent from './EmissionTableStudent';
+import { NIM_list } from './DashboardStudent';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
@@ -25,9 +25,13 @@ const url = 'http://127.0.0.1:5000/';
 const DataView = () => {
     const [level, setLevel] = useState('history');
     const [slot, setSlot] = useState(level);
-    const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
-    const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
-    const [timeframe, setTimeframe] = useState('Day');
+    const [startDate, setStartDate] = useState(dayjs('2022-08-01'));
+    const [endDate, setEndDate] = useState(dayjs('2022-12-31'));
+    const [NIM, setNIM] = useState('23522011');
+    const student = useSelector((state) => state.student);
+    const stdProfile = student.cf_profile;
+    const avatar = stdProfile && stdProfile.gender == 'Female' ? avatar1 : avatar2;
+
     const dispatch = useDispatch();
 
     const handleStartDateChange = (value) => {
@@ -38,10 +42,14 @@ const DataView = () => {
         setEndDate(value);
     };
 
+    const handleNIMChange = (event, newValue) => {
+        setNIM(newValue);
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             const params = new URLSearchParams({
-                NIM: 23522011,
+                NIM: NIM,
                 start_date: startDate ? formattedDate(startDate) : '2023-01-17',
                 end_date: endDate ? formattedDate(endDate) : '2023-04-20'
             });
@@ -59,7 +67,7 @@ const DataView = () => {
         };
         dispatch(startLoading);
         fetchData();
-    }, [dispatch, startDate, endDate]);
+    }, [dispatch, NIM, startDate, endDate]);
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -104,16 +112,17 @@ const DataView = () => {
                         <Grid item xs={12} lg={4}>
                             <ListItem alignItems="flex-start">
                                 <ListItemAvatar>
-                                    <Avatar alt="profile user" src={avatar2} />
+                                    <Avatar alt="profile user" src={avatar} />
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primary="Michael Hans"
+                                    primary={stdProfile && stdProfile.name}
                                     secondary={
                                         <Fragment>
                                             <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
-                                                23522011
+                                                {stdProfile && stdProfile.NIM}
                                             </Typography>
-                                            {' / Master of Informatics '}
+                                            {' / '}
+                                            {stdProfile && stdProfile.major}
                                         </Fragment>
                                     }
                                 />
@@ -121,16 +130,15 @@ const DataView = () => {
                         </Grid>
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
                             <Stack spacing={0.5}>
-                                <Typography>Timeframe</Typography>
-                                <FormControl>
-                                    <Select value={timeframe} onChange={(event) => setTimeframe(event.target.value)} label="Semester">
-                                        <MenuItem value={'Day'}>Day</MenuItem>
-                                        <MenuItem value={'Week'}>Week</MenuItem>
-                                        <MenuItem value={'Month'}>Month</MenuItem>
-                                        <MenuItem value={'Semester'}>Semester</MenuItem>
-                                        <MenuItem value={'Year'}>Year</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                <Typography>NIM</Typography>
+                                <Autocomplete
+                                    disablePortal
+                                    id="combo-box-demo"
+                                    options={NIM_list}
+                                    value={NIM}
+                                    onChange={handleNIMChange}
+                                    renderInput={(params) => <TextField {...params} variant="outlined" size="small" />}
+                                />
                             </Stack>
                         </Grid>
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
@@ -156,25 +164,22 @@ const DataView = () => {
                     </Grid>
                     <Grid item />
                     <Grid item>
-                        <Stack direction="row" alignItems="center" spacing={1}>
-                            <Typography variant="subtitle1" spacing={4} sx={{ pb: 0.3 }}>
-                                Look by
-                            </Typography>
+                        <Stack direction="row" alignItems="center" spacing={0}>
                             <Button
                                 size="small"
-                                onClick={() => setSlot(level)}
-                                color={slot === level ? 'primary' : 'secondary'}
-                                variant={slot === level ? 'outlined' : 'text'}
+                                onClick={() => setSlot('month')}
+                                color={slot === 'month' ? 'primary' : 'secondary'}
+                                variant={slot === 'month' ? 'outlined' : 'text'}
                             >
-                                {level}
+                                Month
                             </Button>
                             <Button
                                 size="small"
-                                onClick={() => setSlot(timeframe)}
-                                color={slot === timeframe ? 'primary' : 'secondary'}
-                                variant={slot === timeframe ? 'outlined' : 'text'}
+                                onClick={() => setSlot('day')}
+                                color={slot === 'day' ? 'primary' : 'secondary'}
+                                variant={slot === 'day' ? 'outlined' : 'text'}
                             >
-                                {timeframe}
+                                Day
                             </Button>
                         </Stack>
                     </Grid>

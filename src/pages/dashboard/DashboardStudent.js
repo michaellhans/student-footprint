@@ -38,7 +38,7 @@ import StudentProfile from './StudentProfile';
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 const url = 'http://127.0.0.1:5000/student';
-const NIM_list = [
+export const NIM_list = [
     23522011, 13519020, 13519142, 23522018, 23521047, 13519129, 23521011, 18221157, 18219309, 18221142, 23522025, 18219004, 13519063,
     23521062, 23522012, 23522008, 13519143, 23521072, 23522023, 23521071, 23522048, 13519053, 18220005, 23521083, 13519208, 23522005,
     13519183, 18220004, 13520112, 23522027, 18221001, 13521100, 23521092, 23520041, 13519200, 13519043, 18221044, 13519184, 13519096,
@@ -59,8 +59,8 @@ function get_percentage(value, avg) {
 
 const DashboardStudent = () => {
     const [slot, setSlot] = useState('day');
-    const [startDate, setStartDate] = useState(dayjs('2023-01-16'));
-    const [endDate, setEndDate] = useState(dayjs('2023-05-30'));
+    const [startDate, setStartDate] = useState(dayjs('2022-08-01'));
+    const [endDate, setEndDate] = useState(dayjs('2022-12-31'));
     const [NIM, setNIM] = useState('23522011');
     const student = useSelector((state) => state.student);
     const stdProfile = student.cf_profile;
