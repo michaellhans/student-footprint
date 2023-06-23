@@ -29,12 +29,7 @@ function pieChartOptions(labels) {
         ],
         tooltip: {
             y: {
-                formatter: function (value) {
-                    return value.toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
-                }
+                formatter: (value) => `${value.toFixed(0)} kg CO2e`
             }
         }
     };

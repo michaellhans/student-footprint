@@ -12,3 +12,9 @@ export function longFormattedDate(dateString) {
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
     return date.toLocaleDateString('en-US', options);
 }
+
+export const code = {
+    IF: 'Bachelor of Informatics',
+    STI: 'Bachelor of Information System & Technology',
+    MIF: 'Master of Informatics'
+};

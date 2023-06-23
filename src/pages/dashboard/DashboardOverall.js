@@ -1,22 +1,7 @@
 import { useState, Fragment, useEffect } from 'react';
 
 // material-ui
-import {
-    Avatar,
-    Box,
-    Button,
-    FormControl,
-    Grid,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    MenuItem,
-    Stack,
-    Typography
-} from '@mui/material';
-
-import Select from '@mui/material/Select';
+import { Avatar, Box, Button, Grid, ListItem, ListItemAvatar, ListItemText, Skeleton, Stack, Typography } from '@mui/material';
 
 import { DatePicker } from '@mui/x-date-pickers-pro';
 
@@ -28,7 +13,7 @@ import MainCard from 'components/MainCard';
 import HighlightProfile from 'components/cards/statistics/HighlightProfile';
 
 // assets
-import avatar2 from 'assets/images/users/avatar-2.png';
+import itbAvatar from 'assets/images/actions/itb.png';
 import GreenAction from './GreenAction';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from '../../../node_modules/react-redux/es/exports';
@@ -49,6 +34,7 @@ const DashboardOverall = () => {
     const itb = useSelector((state) => state.itb);
     const itbProfile = itb.cf_profile;
     const green_action = itb.green_action;
+    const isLoading = itb.isLoading;
     console.log(level);
 
     const most_used_transport =
@@ -128,45 +114,31 @@ const DashboardOverall = () => {
             <Grid item xs={12} sm={12}>
                 <MainCard contentSX={{ p: 2.25 }}>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} lg={4}>
+                        <Grid item xs={12} md={6}>
                             <ListItem alignItems="flex-start">
                                 <ListItemAvatar>
-                                    <Avatar alt="profile user" src={avatar2} />
+                                    <Avatar alt="profile user" src={itbAvatar} />
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primary="Michael Hans"
+                                    primary="Institut Teknologi Bandung"
                                     secondary={
                                         <Fragment>
                                             <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
-                                                23522011
+                                                School of Electrical Engineering and Informatics
                                             </Typography>
-                                            {' / Master of Informatics '}
+                                            {' / Computation '}
                                         </Fragment>
                                     }
                                 />
                             </ListItem>
                         </Grid>
-                        <Grid item xs={12} sm={6} md={4} lg={2.6}>
-                            {/* <Stack spacing={0.5}>
-                                <Typography>Timeframe</Typography>
-                                <FormControl>
-                                    <Select value={timeframe} onChange={(event) => setTimeframe(event.target.value)} label="Timeframe">
-                                        <MenuItem value={'Day'}>Day</MenuItem>
-                                        <MenuItem value={'Week'}>Week</MenuItem>
-                                        <MenuItem value={'Month'}>Month</MenuItem>
-                                        <MenuItem value={'Semester'}>Semester</MenuItem>
-                                        <MenuItem value={'Year'}>Year</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Stack> */}
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={4} lg={2.6}>
+                        <Grid item xs={12} sm={6} md={3}>
                             <Stack spacing={0.5}>
                                 <Typography>Start Period</Typography>
                                 <DatePicker value={startDate} onChange={handleStartDateChange} />
                             </Stack>
                         </Grid>
-                        <Grid item xs={12} sm={6} md={4} lg={2.6}>
+                        <Grid item xs={12} sm={6} md={3}>
                             <Stack spacing={0.5}>
                                 <Typography>End Period</Typography>
                                 <DatePicker value={endDate} onChange={handleEndDateChange} />
@@ -175,7 +147,11 @@ const DashboardOverall = () => {
                     </Grid>
                 </MainCard>
             </Grid>
-            {level === 'Major Statistics' ? (
+            {isLoading ? (
+                <Grid item xs={12}>
+                    <Skeleton variant="rounded" height={1000} sx={{ width: 1 / 1 }} />
+                </Grid>
+            ) : level === 'Major Statistics' ? (
                 <Grid item xs={12} sm={12}>
                     {level === 'Major Statistics' && <DashboardOverallStats startDate={startDate} endDate={endDate} />}
                 </Grid>
@@ -349,7 +325,7 @@ const DashboardOverall = () => {
                     <Grid item xs={12} md={6}>
                         <Grid container alignItems="center" justifyContent="space-between">
                             <Grid item>
-                                <Typography variant="h5">Paper-based vs Electronic-based</Typography>
+                                <Typography variant="h5">Commuting Transportation Distribution</Typography>
                             </Grid>
                             <Grid item />
                         </Grid>
@@ -359,7 +335,14 @@ const DashboardOverall = () => {
                                     <Typography variant="h6" color="textSecondary">
                                         Based on {itbProfile && itbProfile.num_of_students} ITB students
                                     </Typography>
-                                    <Typography variant="h3">{most_used_transport} as the most used transportation</Typography>
+                                    <Typography variant="h3">
+                                        {itbProfile &&
+                                            (
+                                                (itbProfile.most_mode_transportation[most_used_transport] * 100) /
+                                                Object.values(itbProfile.most_mode_transportation).reduce((acc, val) => acc + val, 0)
+                                            ).toFixed(2)}
+                                        % are using {most_used_transport}
+                                    </Typography>
                                 </Stack>
                             </Box>
                             <VerticalBarChart

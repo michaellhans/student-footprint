@@ -59,7 +59,7 @@ const DataView = () => {
         };
         dispatch(startLoading);
         fetchData();
-    }, [startDate, endDate]);
+    }, [dispatch, startDate, endDate]);
 
     return (
         <Grid container rowSpacing={4.5} columnSpacing={2.75}>

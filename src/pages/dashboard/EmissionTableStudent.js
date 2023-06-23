@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 // material-ui
-import { Box, Link, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Link, Stack, Table, Grid, Skeleton, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Tag } from 'antd';
 
 // third-party
 import NumberFormat from 'react-number-format';
-import { formattedDate, longFormattedDate } from 'utils/format';
+import { formattedDate } from 'utils/format';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -148,6 +148,7 @@ export default function EmissionTableStudent({ startDate, endDate }) {
     const [order] = useState('asc');
     const [orderBy] = useState('total');
     const [selected] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -162,86 +163,107 @@ export default function EmissionTableStudent({ startDate, endDate }) {
                     const res = await response.json();
                     console.log(res.data);
                     setRows(res.data);
+                    setIsLoading(false);
                 } else {
                     console.error('Error: ', response.status);
+                    setIsLoading(false);
                 }
             } catch (error) {
                 console.error('Error: ', error);
             }
         };
+        setIsLoading(true);
         fetchData();
     }, [startDate, endDate]);
 
     const isSelected = (NIM) => selected.indexOf(NIM) !== -1;
-
-    return (
-        rows.length > 0 && (
-            <Box>
-                <TableContainer
-                    sx={{
-                        width: '100%',
-                        overflowX: 'auto',
-                        position: 'relative',
-                        display: 'block',
-                        maxWidth: '100%',
-                        '& td, & th': { whiteSpace: 'nowrap' }
-                    }}
-                >
-                    <Table
-                        aria-labelledby="tableTitle"
+    if (isLoading) {
+        return (
+            <Grid item xs={12}>
+                <Skeleton variant="rounded" height={1000} sx={{ width: 1 / 1 }} />
+            </Grid>
+        );
+    } else
+        return (
+            rows.length > 0 && (
+                <Box>
+                    <TableContainer
                         sx={{
-                            '& .MuiTableCell-root:first-child': {
-                                pl: 2
-                            },
-                            '& .MuiTableCell-root:last-child': {
-                                pr: 3
-                            }
+                            width: '100%',
+                            overflowX: 'auto',
+                            position: 'relative',
+                            display: 'block',
+                            maxWidth: '100%',
+                            '& td, & th': { whiteSpace: 'nowrap' }
                         }}
                     >
-                        <EmissionTableStudentHead headCells={headCells} order={order} orderBy={orderBy} />
-                        <TableBody>
-                            {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
-                                const isItemSelected = isSelected(row.NIM);
-                                const labelId = `enhanced-table-checkbox-${index}`;
+                        <Table
+                            aria-labelledby="tableTitle"
+                            sx={{
+                                '& .MuiTableCell-root:first-child': {
+                                    pl: 2
+                                },
+                                '& .MuiTableCell-root:last-child': {
+                                    pr: 3
+                                }
+                            }}
+                        >
+                            <EmissionTableStudentHead headCells={headCells} order={order} orderBy={orderBy} />
+                            <TableBody>
+                                {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
+                                    const isItemSelected = isSelected(row.NIM);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                                return (
-                                    <TableRow
-                                        hover
-                                        role="checkbox"
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        aria-checked={isItemSelected}
-                                        tabIndex={-1}
-                                        key={row.NIM}
-                                        selected={isItemSelected}
-                                    >
-                                        <TableCell component="th" id={labelId} scope="row" align="left">
-                                            <Link color="secondary" component={RouterLink} to="">
-                                                {row.NIM}
-                                            </Link>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <NumberFormat value={row.courses_emission.toFixed(2)} displayType="text" thousandSeparator />
-                                            &nbsp;kg CO<sub>2</sub>e
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <NumberFormat value={row.commuting_emission.toFixed(2)} displayType="text" thousandSeparator />
-                                            &nbsp;kg CO<sub>2</sub>e
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <NumberFormat value={row.outclass_emission.toFixed(2)} displayType="text" thousandSeparator />
-                                            &nbsp;kg CO<sub>2</sub>e
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <NumberFormat value={row.total_emission.toFixed(2)} displayType="text" thousandSeparator />
-                                            &nbsp;kg CO<sub>2</sub>e
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Box>
-        )
-    );
+                                    return (
+                                        <TableRow
+                                            hover
+                                            role="checkbox"
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            aria-checked={isItemSelected}
+                                            tabIndex={-1}
+                                            key={row.NIM}
+                                            selected={isItemSelected}
+                                        >
+                                            <TableCell component="th" id={labelId} scope="row" align="left">
+                                                <Link color="secondary" component={RouterLink} to="">
+                                                    {row.NIM}
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <NumberFormat
+                                                    value={row.courses_emission.toFixed(2)}
+                                                    displayType="text"
+                                                    thousandSeparator
+                                                />
+                                                &nbsp;kg CO<sub>2</sub>e
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <NumberFormat
+                                                    value={row.commuting_emission.toFixed(2)}
+                                                    displayType="text"
+                                                    thousandSeparator
+                                                />
+                                                &nbsp;kg CO<sub>2</sub>e
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <NumberFormat
+                                                    value={row.outclass_emission.toFixed(2)}
+                                                    displayType="text"
+                                                    thousandSeparator
+                                                />
+                                                &nbsp;kg CO<sub>2</sub>e
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                <NumberFormat value={row.total_emission.toFixed(2)} displayType="text" thousandSeparator />
+                                                &nbsp;kg CO<sub>2</sub>e
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Box>
+            )
+        );
 }

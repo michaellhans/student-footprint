@@ -39,20 +39,7 @@ const EmissionPrediction = ({ slot, history }) => {
     const line = theme.palette.divider;
 
     const [options, setOptions] = useState(lineChartOptions);
-    const [series, setSeries] = useState([
-        {
-            name: 'IF',
-            data: [0, 86, 28, 115, 48, 210, 136]
-        },
-        {
-            name: 'STI',
-            data: [0, 43, 14, 56, 24, 105, 68]
-        },
-        {
-            name: 'MIF',
-            data: [0, 70, 33, 105, 28, 150, 106]
-        }
-    ]);
+    const [series, setSeries] = useState([]);
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {

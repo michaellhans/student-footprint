@@ -5,20 +5,17 @@ import {
     Avatar,
     Box,
     Button,
-    FormControl,
     Grid,
     List,
     ListItem,
     ListItemAvatar,
     ListItemText,
-    MenuItem,
     TextField,
     Stack,
     Typography,
+    Skeleton,
     Autocomplete
 } from '@mui/material';
-
-import Select from '@mui/material/Select';
 
 import { DatePicker } from '@mui/x-date-pickers-pro';
 
@@ -68,7 +65,8 @@ const DashboardStudent = () => {
     const student = useSelector((state) => state.student);
     const stdProfile = student.cf_profile;
     const green_action = student.green_action;
-    const [isProfilePage, setIsProfilePage] = useState(stdProfile == null);
+    const isLoading = student.isLoading;
+    const [isProfilePage, setIsProfilePage] = useState(false);
     const avatar = stdProfile && stdProfile.gender == 'Female' ? avatar1 : avatar2;
     // Change it into == null again later
 
@@ -87,7 +85,7 @@ const DashboardStudent = () => {
     };
 
     useEffect(() => {
-        setIsProfilePage(stdProfile == null);
+        setIsProfilePage(false);
     }, [stdProfile]);
 
     useEffect(() => {
@@ -111,7 +109,7 @@ const DashboardStudent = () => {
         };
         dispatch(startLoading);
         fetchData();
-    }, [NIM, startDate, endDate]);
+    }, [dispatch, NIM, startDate, endDate]);
 
     return isProfilePage ? (
         <StudentProfile />
@@ -146,15 +144,6 @@ const DashboardStudent = () => {
                         <Grid item xs={12} sm={6} md={4} lg={2.6}>
                             <Stack spacing={0.5}>
                                 <Typography>NIM</Typography>
-                                {/* <FormControl>
-                                    <Select value={NIM} onChange={(event) => setNIM(event.target.value)} label="NIM">
-                                        <MenuItem value={'Day'}>Day</MenuItem>
-                                        <MenuItem value={'Week'}>Week</MenuItem>
-                                        <MenuItem value={'Month'}>Month</MenuItem>
-                                        <MenuItem value={'Semester'}>Semester</MenuItem>
-                                        <MenuItem value={'Year'}>Year</MenuItem>
-                                    </Select>
-                                </FormControl> */}
                                 <Autocomplete
                                     disablePortal
                                     id="combo-box-demo"
@@ -180,61 +169,68 @@ const DashboardStudent = () => {
                     </Grid>
                 </MainCard>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <HighlightProfile
-                    title="Carbon Footprint"
-                    count={`${(student.cf_in_out['in_class'] + student.cf_in_out['out_class']).toFixed(2)} kg CO2e`}
-                    percentage={35}
-                    isLoss={false}
-                    extra={45.6}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <HighlightProfile
-                    title="Distance to Campus"
-                    count={(stdProfile && stdProfile.distance) + ' km'}
-                    isLoss={stdProfile && stdProfile.distance <= stdProfile.comparison.avg_distance}
-                    percentage={stdProfile && get_percentage(stdProfile.distance, stdProfile.comparison.avg_distance).toFixed(1)}
-                    extra={(stdProfile && Math.abs(stdProfile.distance - stdProfile.comparison.avg_distance).toFixed(1)) + ' km'}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <HighlightProfile
-                    title="Laptop usage"
-                    count={stdProfile && stdProfile.day_laptop_total + ' hours'}
-                    isLoss={stdProfile && stdProfile.day_laptop_total <= stdProfile.comparison.avg_laptop_usage}
-                    percentage={
-                        stdProfile && get_percentage(stdProfile.day_laptop_total, stdProfile.comparison.avg_laptop_usage).toFixed(1)
-                    }
-                    extra={
-                        (stdProfile && Math.abs(stdProfile.day_laptop_total - stdProfile.comparison.avg_laptop_usage).toFixed(1)) + ' hours'
-                    }
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <MainCard contentSX={{ p: 2.25 }}>
-                    <Stack spacing={0.5}>
-                        <Typography variant="h6" color="textSecondary">
-                            Commuting Information
-                        </Typography>
-                        <List sx={{ p: 0 }}>
-                            <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Transportation" />
-                                <Typography>{stdProfile && stdProfile.mode_transportation}</Typography>
-                            </ListItem>
-                            <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Residence" />
-                                <Typography>{stdProfile && stdProfile.residence}</Typography>
-                            </ListItem>
-                            <ListItem sx={{ p: 0 }}>
-                                <ListItemText primary="Travel time" />
-                                <Typography>{stdProfile && stdProfile.travel_time} minutes</Typography>
-                            </ListItem>
-                        </List>
-                    </Stack>
-                </MainCard>
-            </Grid>
-            {/* <Grid item xs={12} sm={6} md={4} lg={3}>
+            {isLoading ? (
+                <Grid item xs={12}>
+                    <Skeleton variant="rounded" height={1000} sx={{ width: 1 / 1 }} />
+                </Grid>
+            ) : (
+                <>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <HighlightProfile
+                            title="Carbon Footprint"
+                            count={`${(student.cf_in_out['in_class'] + student.cf_in_out['out_class']).toFixed(2)} kg CO2e`}
+                            percentage={35}
+                            isLoss={false}
+                            extra={45.6}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <HighlightProfile
+                            title="Distance to Campus"
+                            count={(stdProfile && stdProfile.distance) + ' km'}
+                            isLoss={stdProfile && stdProfile.distance <= stdProfile.comparison.avg_distance}
+                            percentage={stdProfile && get_percentage(stdProfile.distance, stdProfile.comparison.avg_distance).toFixed(1)}
+                            extra={(stdProfile && Math.abs(stdProfile.distance - stdProfile.comparison.avg_distance).toFixed(1)) + ' km'}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <HighlightProfile
+                            title="Laptop usage"
+                            count={stdProfile && stdProfile.day_laptop_total + ' hours'}
+                            isLoss={stdProfile && stdProfile.day_laptop_total <= stdProfile.comparison.avg_laptop_usage}
+                            percentage={
+                                stdProfile && get_percentage(stdProfile.day_laptop_total, stdProfile.comparison.avg_laptop_usage).toFixed(1)
+                            }
+                            extra={
+                                (stdProfile && Math.abs(stdProfile.day_laptop_total - stdProfile.comparison.avg_laptop_usage).toFixed(1)) +
+                                ' hours'
+                            }
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <MainCard contentSX={{ p: 2.25 }}>
+                            <Stack spacing={0.5}>
+                                <Typography variant="h6" color="textSecondary">
+                                    Commuting Information
+                                </Typography>
+                                <List sx={{ p: 0 }}>
+                                    <ListItem sx={{ p: 0 }}>
+                                        <ListItemText primary="Transportation" />
+                                        <Typography>{stdProfile && stdProfile.mode_transportation}</Typography>
+                                    </ListItem>
+                                    <ListItem sx={{ p: 0 }}>
+                                        <ListItemText primary="Residence" />
+                                        <Typography>{stdProfile && stdProfile.residence}</Typography>
+                                    </ListItem>
+                                    <ListItem sx={{ p: 0 }}>
+                                        <ListItemText primary="Travel time" />
+                                        <Typography>{stdProfile && stdProfile.travel_time} minutes</Typography>
+                                    </ListItem>
+                                </List>
+                            </Stack>
+                        </MainCard>
+                    </Grid>
+                    {/* <Grid item xs={12} sm={6} md={4} lg={3}>
                 <MainCard contentSX={{ p: 2.25 }}>
                     <Stack spacing={0.5}>
                         <Typography variant="h6" color="textSecondary">
@@ -266,94 +262,96 @@ const DashboardStudent = () => {
                 </MainCard>
             </Grid> */}
 
-            <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
+                    <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 
-            {/* row 2 */}
-            <Grid item xs={12} md={8}>
-                <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid item>
-                        <Typography variant="h5">Carbon Footprint From Time to Time</Typography>
+                    {/* row 2 */}
+                    <Grid item xs={12} md={8}>
+                        <Grid container alignItems="center" justifyContent="space-between">
+                            <Grid item>
+                                <Typography variant="h5">Carbon Footprint From Time to Time</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Stack direction="row" alignItems="center" spacing={0}>
+                                    <Button
+                                        size="small"
+                                        onClick={() => setSlot('month')}
+                                        color={slot === 'month' ? 'primary' : 'secondary'}
+                                        variant={slot === 'month' ? 'outlined' : 'text'}
+                                    >
+                                        Month
+                                    </Button>
+                                    <Button
+                                        size="small"
+                                        onClick={() => setSlot('day')}
+                                        color={slot === 'day' ? 'primary' : 'secondary'}
+                                        variant={slot === 'day' ? 'outlined' : 'text'}
+                                    >
+                                        Day
+                                    </Button>
+                                </Stack>
+                            </Grid>
+                        </Grid>
+                        <MainCard content={false} sx={{ mt: 1.5 }}>
+                            <Box sx={{ pt: 1, pr: 2 }}>
+                                <EmissionPredictionSingle slot={slot} history={student.cf_history} />
+                            </Box>
+                        </MainCard>
                     </Grid>
-                    <Grid item>
-                        <Stack direction="row" alignItems="center" spacing={0}>
-                            <Button
-                                size="small"
-                                onClick={() => setSlot('month')}
-                                color={slot === 'month' ? 'primary' : 'secondary'}
-                                variant={slot === 'month' ? 'outlined' : 'text'}
-                            >
-                                Month
-                            </Button>
-                            <Button
-                                size="small"
-                                onClick={() => setSlot('day')}
-                                color={slot === 'day' ? 'primary' : 'secondary'}
-                                variant={slot === 'day' ? 'outlined' : 'text'}
-                            >
-                                Day
-                            </Button>
-                        </Stack>
+                    <Grid item xs={12} md={4}>
+                        <Grid container alignItems="center" justifyContent="space-between">
+                            <Grid item>
+                                <Typography variant="h5">Green Action</Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid sx={{ mt: 2, mb: 4 }}>
+                            <GreenAction
+                                green_action={green_action}
+                                total_emission={student.cf_in_out['in_class'] + student.cf_in_out['out_class']}
+                            />
+                        </Grid>
                     </Grid>
-                </Grid>
-                <MainCard content={false} sx={{ mt: 1.5 }}>
-                    <Box sx={{ pt: 1, pr: 2 }}>
-                        <EmissionPredictionSingle slot={slot} history={student.cf_history} />
-                    </Box>
-                </MainCard>
-            </Grid>
-            <Grid item xs={12} md={4}>
-                <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid item>
-                        <Typography variant="h5">Green Action</Typography>
-                    </Grid>
-                </Grid>
-                <Grid sx={{ mt: 2, mb: 4 }}>
-                    <GreenAction
-                        green_action={green_action}
-                        total_emission={student.cf_in_out['in_class'] + student.cf_in_out['out_class']}
-                    />
-                </Grid>
-            </Grid>
 
-            <Grid item xs={12} md={5} lg={4}>
-                <MainCard sx={{ mt: 2 }} content={false}>
-                    <Box sx={{ p: 3, pb: 2 }}>
-                        <Stack spacing={2}>
-                            <Typography variant="h6" color="textSecondary">
-                                Emission Category Distribution
-                            </Typography>
-                            <Typography>Commuting contribute the highest emission</Typography>
-                        </Stack>
-                    </Box>
-                    <EmissionDistribution distribution={student.cf_category} />
-                </MainCard>
-            </Grid>
-            <Grid item xs={12} md={5} lg={4}>
-                <MainCard sx={{ mt: 2 }} content={false}>
-                    <Box sx={{ p: 3, pb: 2 }}>
-                        <Stack spacing={2}>
-                            <Typography variant="h6" color="textSecondary">
-                                Emission In-Class vs Out-Class
-                            </Typography>
-                            <Typography>Out-class activity contribute the most on learning</Typography>
-                        </Stack>
-                    </Box>
-                    <EmissionDistribution distribution={student.cf_in_out} />
-                </MainCard>
-            </Grid>
-            <Grid item xs={12} md={5} lg={4}>
-                <MainCard sx={{ mt: 2 }} content={false}>
-                    <Box sx={{ p: 3, pb: 2 }}>
-                        <Stack spacing={2}>
-                            <Typography variant="h6" color="textSecondary">
-                                Emission Activity Distribution
-                            </Typography>
-                            <Typography>Coursework contribute the highest emission</Typography>
-                        </Stack>
-                    </Box>
-                    <EmissionDistribution distribution={student.cf_activity} />
-                </MainCard>
-            </Grid>
+                    <Grid item xs={12} md={5} lg={4}>
+                        <MainCard sx={{ mt: 2 }} content={false}>
+                            <Box sx={{ p: 3, pb: 2 }}>
+                                <Stack spacing={2}>
+                                    <Typography variant="h6" color="textSecondary">
+                                        Emission Category Distribution
+                                    </Typography>
+                                    <Typography>Commuting contribute the highest emission</Typography>
+                                </Stack>
+                            </Box>
+                            <EmissionDistribution distribution={student.cf_category} />
+                        </MainCard>
+                    </Grid>
+                    <Grid item xs={12} md={5} lg={4}>
+                        <MainCard sx={{ mt: 2 }} content={false}>
+                            <Box sx={{ p: 3, pb: 2 }}>
+                                <Stack spacing={2}>
+                                    <Typography variant="h6" color="textSecondary">
+                                        Emission In-Class vs Out-Class
+                                    </Typography>
+                                    <Typography>Out-class activity contribute the most on learning</Typography>
+                                </Stack>
+                            </Box>
+                            <EmissionDistribution distribution={student.cf_in_out} />
+                        </MainCard>
+                    </Grid>
+                    <Grid item xs={12} md={5} lg={4}>
+                        <MainCard sx={{ mt: 2 }} content={false}>
+                            <Box sx={{ p: 3, pb: 2 }}>
+                                <Stack spacing={2}>
+                                    <Typography variant="h6" color="textSecondary">
+                                        Emission Activity Distribution
+                                    </Typography>
+                                    <Typography>Coursework contribute the highest emission</Typography>
+                                </Stack>
+                            </Box>
+                            <EmissionDistribution distribution={student.cf_activity} />
+                        </MainCard>
+                    </Grid>
+                </>
+            )}
         </Grid>
     );
 };
