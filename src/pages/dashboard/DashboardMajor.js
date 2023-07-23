@@ -28,8 +28,8 @@ const url = 'http://127.0.0.1:5000/major';
 
 const DashboardMajor = () => {
     const [slot, setSlot] = useState('day');
-    const [startDate, setStartDate] = useState(dayjs('2023-01-01'));
-    const [endDate, setEndDate] = useState(dayjs('2023-03-31'));
+    const [startDate, setStartDate] = useState(dayjs('2022-08-01'));
+    const [endDate, setEndDate] = useState(dayjs('2023-05-31'));
     const [major, setMajor] = useState('IF');
     const majorData = useSelector((state) => state.major);
     const majorProfile = majorData.cf_profile;
@@ -58,8 +58,8 @@ const DashboardMajor = () => {
         const fetchData = async () => {
             const params = new URLSearchParams({
                 major: major,
-                start_date: startDate ? formattedDate(startDate) : '2023-01-01',
-                end_date: endDate ? formattedDate(endDate) : '2023-03-31'
+                start_date: startDate ? formattedDate(startDate) : '2022-08-01',
+                end_date: endDate ? formattedDate(endDate) : '2023-05-31'
             });
             try {
                 const response = await fetch(`${url}?${params.toString()}`);

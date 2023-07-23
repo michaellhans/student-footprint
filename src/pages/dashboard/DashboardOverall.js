@@ -29,8 +29,8 @@ const url = 'http://127.0.0.1:5000/itb';
 const DashboardOverall = () => {
     const [level, setLevel] = useState('ITB');
     const [slot, setSlot] = useState('day');
-    const [startDate, setStartDate] = useState(dayjs('2023-01-01'));
-    const [endDate, setEndDate] = useState(dayjs('2023-03-31'));
+    const [startDate, setStartDate] = useState(dayjs('2022-08-01'));
+    const [endDate, setEndDate] = useState(dayjs('2023-05-31'));
     const itb = useSelector((state) => state.itb);
     const itbProfile = itb.cf_profile;
     const green_action = itb.green_action;
@@ -57,8 +57,8 @@ const DashboardOverall = () => {
     useEffect(() => {
         const fetchData = async () => {
             const params = new URLSearchParams({
-                start_date: startDate ? formattedDate(startDate) : '2023-01-01',
-                end_date: endDate ? formattedDate(endDate) : '2023-03-31'
+                start_date: startDate ? formattedDate(startDate) : '2022-08-01',
+                end_date: endDate ? formattedDate(endDate) : '2023-05-31'
             });
             try {
                 const response = await fetch(`${url}?${params.toString()}`);
@@ -315,7 +315,7 @@ const DashboardOverall = () => {
                                     <Typography variant="h6" color="textSecondary">
                                         Period {startDate.format('YYYY-MM-DD')} until {endDate.format('YYYY-MM-DD')} statistics
                                     </Typography>
-                                    <Typography variant="h3">50.4 kg CO2e produced from Electricity</Typography>
+                                    <Typography variant="h3">IF2110 course contribute the most emission</Typography>
                                 </Stack>
                             </Box>
                             <EmissionComparison isExam={false} coursesEmission={itb.cf_course_distribution} />

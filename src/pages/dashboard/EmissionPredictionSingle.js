@@ -50,7 +50,7 @@ const EmissionPredictionSingle = ({ slot, history }) => {
             .map((item) => item.total_emission);
 
         let finalPredicted;
-        if (history.length > 0 && history[0].predicted_emission) {
+        if (history.length > 0) {
             finalPredicted = history.map((item) => item.predicted_emission);
         }
 
@@ -76,7 +76,7 @@ const EmissionPredictionSingle = ({ slot, history }) => {
             }, {});
             finalData = Object.values(agg);
             finalDate = Object.keys(agg);
-            if (history.length > 0 && history[0].predicted_emission) {
+            if (history.length > 0) {
                 agg = history.reduce((result, item) => {
                     const date = new Date(item.date);
                     const year = date.getFullYear();

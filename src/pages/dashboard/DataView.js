@@ -25,8 +25,8 @@ const url = 'http://127.0.0.1:5000/';
 const DataView = () => {
     const [level, setLevel] = useState('history');
     const [slot, setSlot] = useState(level);
-    const [startDate, setStartDate] = useState(dayjs('2023-01-01'));
-    const [endDate, setEndDate] = useState(dayjs('2023-03-31'));
+    const [startDate, setStartDate] = useState(dayjs('2022-08-01'));
+    const [endDate, setEndDate] = useState(dayjs('2023-05-31'));
     const [NIM, setNIM] = useState('23522011');
     const student = useSelector((state) => state.student);
     const stdProfile = student.cf_profile;
@@ -50,8 +50,8 @@ const DataView = () => {
         const fetchData = async () => {
             const params = new URLSearchParams({
                 NIM: NIM,
-                start_date: startDate ? formattedDate(startDate) : '2023-01-01',
-                end_date: endDate ? formattedDate(endDate) : '2023-03-31'
+                start_date: startDate ? formattedDate(startDate) : '2022-08-01',
+                end_date: endDate ? formattedDate(endDate) : '2023-05-31'
             });
             try {
                 const response = await fetch(`${url}student?${params.toString()}`);

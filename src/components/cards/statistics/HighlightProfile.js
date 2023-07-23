@@ -42,14 +42,14 @@ const HighlightProfile = ({ title, count, percentage, isLoss, extra }) => (
                 )}
             </Grid>
         </Stack>
-        <Box sx={{ pt: 2.25 }}>
-            <Typography variant="caption" color="textSecondary">
+        <Box sx={{ pt: 1.25 }}>
+            {/* <Typography variant="caption" color="textSecondary">
                 You made an extra{' '}
                 <Typography component="span" variant="caption" sx={{ color: `${isLoss ? 'primary' : 'warning'}.main` }}>
                     {extra}
                 </Typography>{' '}
                 than average
-            </Typography>
+            </Typography> */}
         </Box>
     </MainCard>
 );
