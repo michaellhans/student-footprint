@@ -315,7 +315,9 @@ const DashboardOverall = () => {
                                     <Typography variant="h6" color="textSecondary">
                                         Period {startDate.format('YYYY-MM-DD')} until {endDate.format('YYYY-MM-DD')} statistics
                                     </Typography>
-                                    <Typography variant="h3">IF2110 course contribute the most emission</Typography>
+                                    <Typography variant="h3">
+                                        {itb.cf_course_distribution[0].course_id || 'IF2111'} course contribute the most emission
+                                    </Typography>
                                 </Stack>
                             </Box>
                             <EmissionComparison isExam={false} coursesEmission={itb.cf_course_distribution} />

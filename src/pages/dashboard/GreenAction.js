@@ -35,6 +35,7 @@ function get_percentage(value, avg) {
 function GreenCard({ id, percentage, value, action }) {
     return (
         <MainCard
+            key={id}
             sx={{
                 mb: 1,
                 backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#1A2027' : '#fff')
@@ -43,7 +44,10 @@ function GreenCard({ id, percentage, value, action }) {
             <Grid container spacing={2}>
                 <Grid item>
                     <ButtonBase sx={{ width: 64, height: 64 }}>
-                        <Img alt="complex" src={id % 3 == 0 ? walking : id % 3 == 1 ? electricity : carpool} />
+                        <Img
+                            alt="complex"
+                            src={action === 'walking' ? walking : (action === 'energy_saving') == 1 ? electricity : carpool}
+                        />
                     </ButtonBase>
                 </Grid>
                 <Grid item xs={12} sm container direction="column" spacing={0.5}>

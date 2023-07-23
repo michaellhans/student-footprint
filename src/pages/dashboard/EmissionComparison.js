@@ -39,22 +39,17 @@ const barChartOptions = {
     },
     plotOptions: {
         bar: {
+            distributed: true,
             columnWidth: '45%',
             borderRadius: 4,
             horizontal: true
         }
     },
-    colors: [
-        function ({ value }) {
-            if (value < 70) {
-                return '#FAAD14';
-            } else {
-                return '#F5222D';
-            }
-        }
-    ],
     dataLabels: {
         enabled: false
+    },
+    legend: {
+        show: false
     },
     xaxis: {
         categories: [
@@ -82,8 +77,8 @@ const barChartOptions = {
 };
 
 const electronic = {
-    yes: 'Required electronic device',
-    no: "Doesn't required electronic device"
+    yes: 'Required electronic device on class',
+    no: "Doesn't required electronic device on class"
 };
 
 const exam = {
@@ -111,6 +106,7 @@ function EmissionComparison({ isExam, coursesEmission }) {
     ]);
     const [categories, setCategories] = useState([]);
     const [colors, setColors] = useState([]);
+    console.log(coursesEmission);
 
     useEffect(() => {
         // Extract list of total emission
@@ -121,10 +117,11 @@ function EmissionComparison({ isExam, coursesEmission }) {
 
         // Extract list of class electronic
         const colorMapping = {
-            false: '#F5222D',
-            true: '#FAAD14'
+            true: '#F5222D',
+            false: '#FAAD14'
         };
         const classElectronic = coursesEmission.map((item) => colorMapping[item.class_electronic]);
+        console.log(classElectronic);
 
         setSeries([{ data: totalEmissionList.slice(0, 10) }]);
         setCategories(courseList.slice(0, 10));
@@ -134,7 +131,8 @@ function EmissionComparison({ isExam, coursesEmission }) {
     useEffect(() => {
         setOptions((prevState) => ({
             ...prevState,
-            // colors: colors.length > 0 ? [...colors] : ['#F5222D'],
+            colors: colors.length > 0 ? [...colors] : ['#F5222D'],
+            // colors: colors,
             xaxis: {
                 labels: {
                     style: {
